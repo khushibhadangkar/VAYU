@@ -46,10 +46,10 @@
   --donut-residential: #907ad6;
   --donut-others: #8e9cae;
 
-  /* Typography Stacks */
-  --font-serif: 'Instrument Serif', 'Newsreader', Georgia, serif;
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Plus Jakarta Sans", "Inter", sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  /* Typography Stacks — All Times New Roman */
+  --font-serif: "Times New Roman", Times, Baskerville, Georgia, serif;
+  --font-sans: "Times New Roman", Times, Baskerville, Georgia, serif;
+  --font-mono: "Times New Roman", Times, Georgia, serif;
 
   /* Shadows */
   --shadow-sm: 0 2px 8px rgba(10, 25, 45, 0.04);
@@ -75,6 +75,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: "Times New Roman", Times, Baskerville, Georgia, serif !important;
 }
 
 html, body {
@@ -84,7 +85,7 @@ html, body {
   background-image: var(--bg-gradient);
   background-attachment: fixed;
   color: var(--text-primary);
-  font-family: var(--font-sans);
+  font-family: "Times New Roman", Times, Baskerville, Georgia, serif !important;
   font-size: 13.5px;
   line-height: 1.45;
   -webkit-font-smoothing: antialiased;
