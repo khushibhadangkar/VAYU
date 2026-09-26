@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VAYU — Urban Environmental Digital Twin | Clean Air Intelligence</title>
+  <meta name="description" content="AI-powered urban environmental digital twin providing predictive analytics, source apportionment, and policy scenario simulations for cleaner cities." />
+  
+  <!-- Favicon / Web App Icon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%230284c7'/><path d='M25 50 Q50 20 75 50 T125 50' stroke='white' stroke-width='8' fill='none'/></svg>" />
+
+  <!-- Premium Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="/src/styles/main.css" />
+</head>
+<body>
+  <!-- Ambient Atmospheric Backing Glows -->
+  <div class="ambient-glow glow-top-left"></div>
+  <div class="ambient-glow glow-center-right"></div>
+  <div class="ambient-glow glow-bottom-center"></div>
+
+  <!-- Main App Shell -->
+  <div class="app-layout" id="app">
+
+    <!-- TOP HEADER -->
+    <header class="top-nav" id="topNav">
+      <!-- Brand Logo -->
+      <div class="nav-brand">
+        <div class="brand-logo-mark" aria-hidden="true">
+          <div class="orb-core"></div>
+          <div class="orb-swirl"></div>
+          <div class="orb-highlight"></div>
+        </div>
+        <div class="brand-text-container">
+          <span class="brand-title">VAYU</span>
+          <span class="brand-badge">PRO</span>
+        </div>
+      </div>
+
+      <!-- Center Search Pill -->
+      <div class="nav-search-wrapper" id="navSearchTrigger" role="button" tabindex="0" title="Click or press ⌘K to search">
+        <svg class="nav-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <span class="nav-search-placeholder">Search location, area or pollutant...</span>
+        <kbd class="nav-search-kbd">⌘ K</kbd>
+      </div>
+
+      <!-- Right Utility Controls -->
+      <div class="nav-actions">
+        <!-- Date / Time Pill -->
+        <div class="pill-badge pill-datetime" id="liveDateTimePill">
+          <div class="weather-sun-icon" title="Hazy Sunshine">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="4.5" fill="#F59E0B" />
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div class="datetime-text">
+            <span class="date-str" id="headerDate">Mon, 22 Sept 2026</span>
+            <span class="time-str" id="headerTime">10:24 AM</span>
+          </div>
+        </div>
+
+        <!-- City Selector Dropdown -->
+        <div class="city-selector-dropdown" id="cityDropdown">
+          <button class="pill-badge pill-location" id="citySelectorBtn" aria-haspopup="true" aria-expanded="false">
+            <svg class="pin-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span class="location-name" id="currentLocationName">Mumbai</span>
+            <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          
+          <div class="dropdown-menu" id="cityMenu">
+            <div class="dropdown-header">Select Digital Twin</div>
+            <button class="dropdown-item active" data-city="Mumbai" data-aqi="168" data-temp="28" data-wind="NW 12 km/h">
+              <span class="city-dot active"></span>
+              <span class="city-label">Mumbai, Maharashtra</span>
+              <span class="city-aqi badge-amber">168 AQI</span>
+            </button>
+            <button class="dropdown-item" data-city="Delhi NCR" data-aqi="248" data-temp="31" data-wind="W 8 km/h">
+              <span class="city-dot"></span>
+              <span class="city-label">Delhi NCR, India</span>
+              <span class="city-aqi badge-red">248 AQI</span>
+            </button>
+            <button class="dropdown-item" data-city="Bengaluru" data-aqi="78" data-temp="24" data-wind="SE 15 km/h">
+              <span class="city-dot"></span>
+              <span class="city-label">Bengaluru, Karnataka</span>
+              <span class="city-aqi badge-green">78 AQI</span>
+            </button>
+            <button class="dropdown-item" data-city="Singapore" data-aqi="42" data-temp="30" data-wind="E 10 km/h">
+              <span class="city-dot"></span>
+              <span class="city-label">Singapore Marina</span>
+              <span class="city-aqi badge-green">42 AQI</span>
+            </button>
+            <button class="dropdown-item" data-city="London" data-aqi="36" data-temp="18" data-wind="SW 14 km/h">
+              <span class="city-dot"></span>
+              <span class="city-label">Greater London, UK</span>
+              <span class="city-aqi badge-green">36 AQI</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- User Profile Avatar Pill -->
+        <button class="user-avatar-pill" id="userMenuBtn" title="User Profile: Khushi B.">
+          <div class="avatar-ring">
+            <span class="avatar-initials">KB</span>
+            <span class="online-indicator"></span>
+          </div>
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN BODY GRID CONTAINER -->
+    <main class="dashboard-body">
+
+      <!-- LEFT SIDEBAR FLOATING DOCK -->
+      <aside class="sidebar-dock" id="mainSidebar" aria-label="Primary Navigation">
+        <nav class="nav-stack">
+          <button class="nav-link active" data-view="overview" id="nav-overview">
+            <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="7" height="9" x="3" y="3" rx="1"></rect>
+              <rect width="7" height="5" x="14" y="3" rx="1"></rect>
+              <rect width="7" height="9" x="14" y="12" rx="1"></rect>
+              <rect width="7" height="5" x="3" y="16" rx="1"></rect>
+            </svg>
+            <span class="nav-text">Overview</span>
+          </button>
+
+          <button class="nav-link" data-view="live-air" id="nav-live-air">
+            <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
+            </svg>
+            <span class="nav-text">Live Air Quality</span>
+          </button>
+
+          <button class="nav-link" data-view="source-analysis" id="nav-source-analysis">
+            <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 2a10 10 0 0 1 10 10h-10V2z"></path>
+              <path d="M12 12 2.1 12a10 10 0 0 1 7-9.5L12 12z"></path>
+            </svg>
+            <span class="nav-text">Source Analysis</span>
+          </button>
+
+          <button class="nav-link" data-view="simulator" id="nav-simulator">
+            <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m14 12-8.5 8.5a2.12 2.12 0 1 1-3-3L11 9"></path>
+              <path d="M15 13 9 7l4-4 6 6-4 4Z"></path>
+              <path d="m18 10 3-3"></path>
+            </svg>
+            <span class="nav-text">Scenario Simulator</span>
+          </button>
+
+          <button class="nav-link" data-view="hotspots" id="nav-hotspots">
+            <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"></circle>
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="m12 3 0 3M12 18 12 21M3 12 6 12M18 12 21 12"></path>
+            </svg>
+            <span class="nav-text">Hotspots</span>
+          </button>
+
+          <button class="nav-link" data-view="reports" id="nav-reports">
+            <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            <span class="nav-text">Reports</span>
+          </button>
+
+          <button class="nav-link" data-view="settings" id="nav-settings">
+            <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+            <span class="nav-text">Settings</span>
+          </button>
+        </nav>
+      </aside>
+
+      <!-- CENTER & RIGHT WORKSPACE STAGE -->
+      <section class="stage-container">
+
+        <!-- UPPER HALF: HERO DIGITAL TWIN + FORECAST & SCENARIOS -->
+        <div class="hero-forecast-split">
+
+          <!-- CENTER HERO DIGITAL TWIN VIEWPORT -->
+          <div class="twin-viewport-card" id="digitalTwinCard">
+
+            <!-- Background Aerial Imagery -->
+            <div class="aerial-viewport-bg" id="aerialViewportBg">
+              <img src="/assets/mumbai_aerial.jpg" alt="Aerial 3D Digital Twin View of Mumbai Coastal Peninsula and Bandra Worli Sea Link" class="aerial-image" id="aerialImage" />
+              <div class="aerial-mesh-overlay"></div>
+              <div class="aerial-vignette-light"></div>
+            </div>
+
+            <!-- Canvas for Dynamic Wind Vector Streamlines -->
+            <canvas id="windParticleCanvas" class="wind-canvas"></canvas>
+
+            <!-- SVG Vector Traffic Overlay along Sea Link & Highways (toggled via layer) -->
+            <svg class="traffic-overlay-svg" id="trafficLayerSvg" viewBox="0 0 1000 600" preserveAspectRatio="none">
+              <!-- Bandra Worli Sea Link Route Glow -->
+              <path class="traffic-route route-primary" d="M 120 480 Q 220 380 370 340 T 480 320" />
+              <path class="traffic-route route-arterial-1" d="M 370 340 Q 420 310 520 280 T 680 250" />
+              <path class="traffic-route route-arterial-2" d="M 450 360 Q 560 380 720 390" />
+              <!-- Pulsing Traffic Flow Packets -->
+              <circle class="traffic-packet p1" r="3" fill="#38bdf8" />
+              <circle class="traffic-packet p2" r="3" fill="#f59e0b" />
+              <circle class="traffic-packet p3" r="3.5" fill="#ef4444" />
+            </svg>
+
+            <!-- EDITORIAL TYPOGRAPHY OVERLAY (Top-Left) -->
+            <div class="editorial-header-block">
+              <span class="editorial-eyebrow">URBAN ENVIRONMENTAL DIGITAL TWIN</span>
+              <h1 class="editorial-headline">
+                <span class="line-1">Cleaner Cities</span>
+                <span class="line-2">Brighter Tomorrows</span>
+              </h1>
+              <p class="editorial-subcopy">
+                AI-powered insights to understand, predict and reduce urban air pollution.
+              </p>
+            </div>
+
+            <!-- FLOATING LIVE AIR QUALITY METRICS CARD -->
+            <div class="floating-metrics-card" id="liveMetricsCard">
+              <div class="fmc-header">
+                <div class="fmc-loc-badge">
+                  <div class="fmc-loc-icon">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                  </div>
+                  <div class="fmc-loc-text">
+                    <span class="fmc-city" id="fmcCityName">Mumbai</span>
+                    <span class="fmc-sub">Live Air Quality</span>
+                  </div>
+                </div>
+
+                <div class="fmc-weather-strip">
+                  <div class="fmc-weather-item">
+                    <span class="weather-glyph">☀️</span>
+                    <span class="weather-val" id="fmcTemp">28°C</span>
+                    <span class="weather-cond" id="fmcCondition">Haze</span>
+                  </div>
+                  <div class="fmc-weather-divider"></div>
+                  <div class="fmc-weather-item">
+                    <span class="wind-glyph">💨</span>
+                    <span class="wind-dir-arrow">↖</span>
+                    <span class="wind-label">NW</span>
+                    <span class="wind-speed" id="fmcWind">12 km/h</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Big AQI Callout -->
+              <div class="fmc-aqi-row">
+                <div class="aqi-num-group">
+                  <span class="aqi-prefix">AQI</span>
+                  <span class="aqi-value" id="fmcAqiVal">168</span>
+                </div>
+                <div class="aqi-status-badge badge-moderate" id="fmcAqiStatus">
+                  <span class="status-dot"></span>
+                  <span class="status-label">Moderate</span>
+                </div>
+              </div>
+
+              <!-- Detailed 5-Pollutant Breakdown Strip -->
+              <div class="fmc-pollutants-row" id="pollutantsRow">
+                <div class="pollutant-pill" data-pollutant="pm25">
+                  <div class="p-dot dot-pm25"></div>
+                  <span class="p-name">PM2.5</span>
+                  <span class="p-val" id="valPm25">68</span>
+                  <span class="p-unit">µg/m³</span>
+                </div>
+
+                <div class="pollutant-pill" data-pollutant="pm10">
+                  <div class="p-dot dot-pm10"></div>
+                  <span class="p-name">PM10</span>
+                  <span class="p-val" id="valPm10">112</span>
+                  <span class="p-unit">µg/m³</span>
+                </div>
+
+                <div class="pollutant-pill" data-pollutant="no2">
+                  <div class="p-dot dot-no2"></div>
+                  <span class="p-name">NO₂</span>
+                  <span class="p-val" id="valNo2">42</span>
+                  <span class="p-unit">µg/m³</span>
+                </div>
+
+                <div class="pollutant-pill" data-pollutant="so2">
+                  <div class="p-dot dot-so2"></div>
+                  <span class="p-name">SO₂</span>
+                  <span class="p-val" id="valSo2">8</span>
+                  <span class="p-unit">µg/m³</span>
+                </div>
+
+                <div class="pollutant-pill" data-pollutant="o3">
+                  <div class="p-dot dot-o3"></div>
+                  <span class="p-name">O₃</span>
+                  <span class="p-val" id="valO3">96</span>
+                  <span class="p-unit">µg/m³</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- INTERACTIVE HOTSPOT PINS OVER THE DIGITAL TWIN MAP -->
+            <div class="map-beacons-layer" id="mapBeaconsContainer">
+              <!-- Bandra Hotspot -->
+              <div class="hotspot-beacon" id="beaconBandra" style="top: 26%; left: 58%;" data-name="Bandra" data-aqi="188" data-category="High Traffic & Commercial">
+                <div class="beacon-pulse-ring"></div>
+                <div class="beacon-core core-amber"></div>
+                <div class="beacon-label-pill">Bandra</div>
+              </div>
+
+              <!-- Dadar Hotspot -->
+              <div class="hotspot-beacon" id="beaconDadar" style="top: 38%; left: 56%;" data-name="Dadar" data-aqi="196" data-category="Transit Hub & Dense Corridor">
+                <div class="beacon-pulse-ring pulse-delay-1"></div>
+                <div class="beacon-core core-orange"></div>
+                <div class="beacon-label-pill">Dadar</div>
+              </div>
+
+              <!-- Lower Parel Hotspot (Glowing orange node & dark pill) -->
+              <div class="hotspot-beacon active-glow" id="beaconLowerParel" style="top: 47%; left: 54%;" data-name="Lower Parel" data-aqi="176" data-category="Commercial High-Rise & Mill Compound">
+                <div class="beacon-pulse-ring pulse-delay-2"></div>
+                <div class="beacon-core core-hot"></div>
+                <div class="beacon-label-pill beacon-pill-highlight">Lower Parel</div>
+              </div>
+
+              <!-- Sion Hotspot -->
+              <div class="hotspot-beacon" id="beaconSion" style="top: 57%; left: 58%;" data-name="Sion" data-aqi="189" data-category="Industrial Arterial">
+                <div class="beacon-pulse-ring"></div>
+                <div class="beacon-core core-amber"></div>
+                <div class="beacon-label-pill">Sion</div>
+              </div>
+
+              <!-- Kurla Hotspot -->
+              <div class="hotspot-beacon" id="beaconKurla" style="top: 43%; left: 67%;" data-name="Kurla" data-aqi="218" data-category="Heavy Industrial & Railway Junction">
+                <div class="beacon-pulse-ring pulse-heavy"></div>
+                <div class="beacon-core core-crimson"></div>
+                <div class="beacon-label-pill">Kurla</div>
+              </div>
+            </div>
+
+            <!-- MAP LAYER CONTROLS (Top Right of Digital Twin Viewport) -->
+            <div class="map-controls-panel" id="mapControlsPanel">
+              <div class="map-controls-header">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                  <polyline points="2 17 12 22 22 17"></polyline>
+                  <polyline points="2 12 12 17 22 12"></polyline>
+                </svg>
+                <span>Layers</span>
+                <svg class="chevron-sm" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </div>
+
+              <div class="layer-buttons-stack">
+                <button class="layer-pill-btn active" id="layerAirQuality" data-layer="airQuality">
+                  <span class="layer-icon-dot dot-air"></span>
+                  <span class="layer-label">Air Quality</span>
+                </button>
+
+                <button class="layer-pill-btn" id="layerTraffic" data-layer="traffic">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="9" rx="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                  <span class="layer-label">Traffic Density</span>
+                </button>
+
+                <button class="layer-pill-btn" id="layerIndustrial" data-layer="industrial">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M2 20h20"></path>
+                    <path d="m14 10-4 4"></path>
+                    <path d="M18 10h4v10H2V7l6 5 6-5 4 3z"></path>
+                  </svg>
+                  <span class="layer-label">Industrial Activity</span>
+                </button>
+
+                <button class="layer-pill-btn active" id="layerWeather" data-layer="weather">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"></path>
+                    <path d="M9.6 4.6A2 2 0 1 1 11 8H2"></path>
+                    <path d="M12.6 19.4A2 2 0 1 0 14 16H2"></path>
+                  </svg>
+                  <span class="layer-label">Weather (Wind)</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- INTERACTIVE TIMELINE PLAYBACK SCRUBBER (Bottom of Digital Twin) -->
+            <div class="timeline-scrubber-bar" id="timelineBar">
+              <button class="timeline-play-btn" id="timelinePlayBtn" title="Play 24-hour simulation">
+                <svg class="play-icon" id="playIconSvg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                <svg class="pause-icon hidden" id="pauseIconSvg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <rect x="6" y="4" width="4" height="16"></rect>
+                  <rect x="14" y="4" width="4" height="16"></rect>
+                </svg>
+              </button>
+
+              <div class="timeline-track-wrapper">
+                <div class="timeline-rail" id="timelineRail">
+                  <div class="timeline-progress-fill" id="timelineProgressFill" style="width: 48%;"></div>
+                  <div class="timeline-thumb" id="timelineThumb" style="left: 48%;"></div>
+                  
+                  <!-- Timeline Hour Stations -->
+                  <div class="timeline-stations">
+                    <button class="station-mark" data-hour="6" data-label="6 AM" style="left: 10%;">
+                      <span class="station-dot"></span>
+                      <span class="station-label">6 AM</span>
+                    </button>
+                    <button class="station-mark" data-hour="9" data-label="9 AM" style="left: 28%;">
+                      <span class="station-dot"></span>
+                      <span class="station-label">9 AM</span>
+                    </button>
+                    <button class="station-mark active" data-hour="12" data-label="12 PM" style="left: 48%;">
+                      <span class="station-dot"></span>
+                      <span class="station-label">12 PM</span>
+                    </button>
+                    <button class="station-mark" data-hour="15" data-label="3 PM" style="left: 68%;">
+                      <span class="station-dot"></span>
+                      <span class="station-label">3 PM</span>
+                    </button>
+                    <button class="station-mark" data-hour="18" data-label="6 PM" style="left: 84%;">
+                      <span class="station-dot"></span>
+                      <span class="station-label">6 PM</span>
+                    </button>
+                    <button class="station-mark" data-hour="21" data-label="9 PM" style="left: 98%;">
+                      <span class="station-dot"></span>
+                      <span class="station-label">9 PM</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Time Horizon Dropdown -->
+              <div class="timeline-range-selector">
+                <button class="pill-range-btn" id="rangeBtn">
+                  <span>24h</span>
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+          </div><!-- END twin-viewport-card -->
+
+          <!-- RIGHT SIDEBAR PANEL: FORECAST & SCENARIOS -->
+          <div class="forecast-panel-card" id="forecastPanelCard">
+
+            <!-- Panel Header -->
+            <div class="forecast-panel-header">
+              <div class="fph-title-group">
+                <div class="pulse-sparkle-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                  </svg>
+                </div>
+                <h2 class="fph-title">Forecast & Scenarios</h2>
+              </div>
+              <button class="fph-expand-btn" id="openForecastModalBtn" title="Expand Analysis Studio">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Segmented Control Tabs -->
+            <div class="segmented-tabs" role="tablist">
+              <button class="seg-tab active" role="tab" aria-selected="true" data-tab="forecast">Forecast</button>
+              <button class="seg-tab" role="tab" aria-selected="false" data-tab="source">Source Contribution</button>
+              <button class="seg-tab" role="tab" aria-selected="false" data-tab="scenario">Scenario Analysis</button>
+            </div>
+
+            <!-- Predicted AQI Callout -->
+            <div class="predicted-aqi-block">
+              <span class="pred-label">Predicted AQI</span>
+              <div class="pred-value-row">
+                <span class="pred-number" id="predAqiNum">142</span>
+                <div class="pred-delta-badge" id="predDeltaBadge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="7" x2="17" y2="17"></line>
+                    <polyline points="17 7 17 17 7 17"></polyline>
+                  </svg>
+                  <span id="predPercentText">15%</span>
+                  <span class="pred-horizon">in next 24 hours</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Interactive SVG Line Chart -->
+            <div class="forecast-chart-container" id="chartContainer">
+              <svg class="forecast-svg-chart" id="forecastSvgChart" viewBox="0 0 340 180" preserveAspectRatio="none">
+                <defs>
+                  <!-- Soft Area Gradients -->
+                  <linearGradient id="observedAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.18" />
+                    <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.0" />
+                  </linearGradient>
+                  <linearGradient id="scenarioAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#10b981" stop-opacity="0.14" />
+                    <stop offset="100%" stop-color="#10b981" stop-opacity="0.0" />
+                  </linearGradient>
+                </defs>
+
+                <!-- Horizontal Grid Lines -->
+                <line class="chart-grid-line" x1="30" y1="20" x2="330" y2="20" />
+                <line class="chart-grid-line" x1="30" y1="60" x2="330" y2="60" />
+                <line class="chart-grid-line" x1="30" y1="100" x2="330" y2="100" />
+                <line class="chart-grid-line" x1="30" y1="140" x2="330" y2="140" />
+
+                <!-- Y-Axis Labels -->
+                <text class="chart-axis-label" x="12" y="24">300</text>
+                <text class="chart-axis-label" x="12" y="64">200</text>
+                <text class="chart-axis-label" x="12" y="104">100</text>
+                <text class="chart-axis-label" x="16" y="144">0</text>
+
+                <!-- Vertical "Now" Divider Indicator -->
+                <line class="chart-now-divider" x1="120" y1="15" x2="120" y2="145" stroke="#60a5fa" stroke-dasharray="3 3" stroke-width="1.5" />
+                <text class="chart-now-tag" x="120" y="12" text-anchor="middle">Now</text>
+
+                <!-- Area Fills -->
+                <path class="chart-area-fill" id="observedArea" d="M 30 100 L 60 98 L 85 106 L 120 92 L 120 140 L 30 140 Z" fill="url(#observedAreaGrad)" />
+                <path class="chart-area-fill" id="scenarioArea" d="M 120 92 Q 170 108 220 114 T 330 110 L 330 140 L 120 140 Z" fill="url(#scenarioAreaGrad)" />
+
+                <!-- Series 1: Observed (Solid Navy) -->
+                <path class="chart-path path-observed" id="pathObserved" d="M 30 100 L 60 98 L 85 106 L 120 92" />
+                
+                <!-- Series 2: Model Forecast (Dashed Blue) -->
+                <path class="chart-path path-forecast" id="pathForecast" d="M 120 92 Q 170 82 220 78 T 330 68" />
+
+                <!-- Series 3: Scenario (Dashed Green) -->
+                <path class="chart-path path-scenario" id="pathScenario" d="M 120 92 Q 170 108 220 114 T 330 110" />
+
+                <!-- Data Points & Pulsing Markers -->
+                <circle class="chart-point pt-observed" cx="30" cy="100" r="3" />
+                <circle class="chart-point pt-observed" cx="60" cy="98" r="3" />
+                <circle class="chart-point pt-observed" cx="85" cy="106" r="3" />
+                <circle class="chart-point pt-now" cx="120" cy="92" r="4.5" />
+
+                <circle class="chart-point pt-forecast" cx="180" cy="84" r="3" />
+                <circle class="chart-point pt-forecast" cx="240" cy="76" r="3" />
+                <circle class="chart-point pt-forecast" cx="300" cy="71" r="3" />
+                <circle class="chart-point pt-forecast" cx="330" cy="68" r="3" />
+
+                <circle class="chart-point pt-scenario" id="ptScen1" cx="180" cy="105" r="3" />
+                <circle class="chart-point pt-scenario" id="ptScen2" cx="240" cy="112" r="3" />
+                <circle class="chart-point pt-scenario" id="ptScen3" cx="300" cy="111" r="3" />
+                <circle class="chart-point pt-scenario" id="ptScen4" cx="330" cy="110" r="3" />
+
+                <!-- Interactive Cursor Overlay (Appears on hover) -->
+                <g id="chartHoverGroup" class="chart-hover-group hidden">
+                  <line id="hoverCrosshair" x1="0" y1="15" x2="0" y2="145" stroke="#94a3b8" stroke-dasharray="2 2" stroke-width="1" />
+                  <circle id="hoverCursorDot" cx="0" cy="0" r="5" fill="#0284c7" stroke="#ffffff" stroke-width="2" />
+                </g>
+              </svg>
+
+              <!-- Chart X-Axis Labels -->
+              <div class="chart-x-axis">
+                <span class="x-lbl">Now</span>
+                <span class="x-lbl">6h</span>
+                <span class="x-lbl">12h</span>
+                <span class="x-lbl">18h</span>
+                <span class="x-lbl">24h</span>
+              </div>
+
+              <!-- Interactive Floating Tooltip -->
+              <div class="chart-tooltip-box hidden" id="chartTooltip">
+                <div class="ct-time" id="ctTime">18h Forecast</div>
+                <div class="ct-row">
+                  <span class="ct-dot bg-blue"></span>
+                  <span class="ct-label">Baseline:</span>
+                  <span class="ct-val" id="ctBaselineVal">162 AQI</span>
+                </div>
+                <div class="ct-row">
+                  <span class="ct-dot bg-green"></span>
+                  <span class="ct-label">Simulated:</span>
+                  <span class="ct-val" id="ctSimulatedVal">118 AQI</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chart Legend -->
+            <div class="chart-legend-row">
+              <div class="legend-item">
+                <span class="legend-symbol sym-observed"></span>
+                <span class="legend-text">Observed</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-symbol sym-forecast"></span>
+                <span class="legend-text">Model Forecast</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-symbol sym-scenario"></span>
+                <span class="legend-text">Scenario</span>
+              </div>
+            </div>
+
+            <!-- COMPARE INTERVENTIONS SECTION -->
+            <div class="interventions-section">
+              <div class="interventions-header">
+                <h3 class="ih-title">Compare Interventions</h3>
+                <p class="ih-subtitle">Simulate the impact of different actions on air quality.</p>
+              </div>
+
+              <!-- Intervention Items List -->
+              <div class="intervention-cards-list">
+
+                <!-- 1. Traffic Restriction (Active by default) -->
+                <div class="intervention-item-card" id="cardTraffic">
+                  <div class="ii-icon-box bg-slate-subtle">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1e293b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 10.9 2 11.2 2 11.5V16c0 .6.4 1 1 1h2"></path>
+                      <circle cx="7" cy="17" r="2"></circle>
+                      <path d="M9 17h6"></path>
+                      <circle cx="17" cy="17" r="2"></circle>
+                    </svg>
+                  </div>
+                  <div class="ii-meta">
+                    <span class="ii-name">Traffic Restriction</span>
+                    <span class="ii-badge badge-green-glow"><b>-22%</b> in PM2.5</span>
+                  </div>
+                  <label class="switch-toggle" title="Toggle Traffic Restriction">
+                    <input type="checkbox" id="toggleTraffic" checked />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <!-- 2. Industrial Emission Control -->
+                <div class="intervention-item-card" id="cardIndustrial">
+                  <div class="ii-icon-box bg-purple-subtle">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M2 20h20"></path>
+                      <path d="m14 10-4 4"></path>
+                      <path d="M18 10h4v10H2V7l6 5 6-5 4 3z"></path>
+                    </svg>
+                  </div>
+                  <div class="ii-meta">
+                    <span class="ii-name">Industrial Emission Control</span>
+                    <span class="ii-badge badge-green-glow"><b>-28%</b> in PM2.5</span>
+                  </div>
+                  <label class="switch-toggle" title="Toggle Industrial Control">
+                    <input type="checkbox" id="toggleIndustrial" />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <!-- 3. Combined Action -->
+                <div class="intervention-item-card" id="cardCombined">
+                  <div class="ii-icon-box bg-emerald-subtle">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
+                      <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
+                    </svg>
+                  </div>
+                  <div class="ii-meta">
+                    <span class="ii-name">Combined Action</span>
+                    <span class="ii-badge badge-green-glow"><b>-40%</b> in PM2.5</span>
+                  </div>
+                  <label class="switch-toggle" title="Toggle Combined Action">
+                    <input type="checkbox" id="toggleCombined" />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+              </div><!-- END intervention-cards-list -->
+
+              <!-- RUN SCENARIO SIMULATION BUTTON -->
+              <button class="run-simulation-btn" id="runSimulationBtn">
+                <span>Run Scenario Simulation</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </button>
+            </div>
+
+          </div><!-- END forecast-panel-card -->
+
+        </div><!-- END hero-forecast-split -->
+
+        <!-- LOWER HALF: POLLUTION HOTSPOTS & SOURCE CONTRIBUTION -->
+        <div class="bottom-analytics-split">
+
+          <!-- CARD 1: POLLUTION HOTSPOTS -->
+          <div class="analytics-card hotspots-card" id="hotspotsCard">
+            <div class="card-header-bar">
+              <h2 class="card-title">Pollution Hotspots</h2>
+              <div class="card-filter-dropdown">
+                <button class="pill-filter-btn" id="hotspotFilterBtn">
+                  <span id="hotspotFilterLabel">PM2.5</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="hotspots-grid-content">
+              <!-- Left: Minimap Widget -->
+              <div class="hotspots-minimap-container" id="minimapBox">
+                <img src="/assets/mumbai_minimap.jpg" alt="Mumbai Coastline Hotspot Map" class="minimap-base-img" />
+                
+                <!-- Interactive Heatmap Overlay Pins on Minimap -->
+                <div class="minimap-nodes-layer">
+                  <div class="mini-node node-andheri" style="top: 26%; left: 42%;" data-name="Andheri" title="Andheri: 182 AQI">
+                    <span class="mini-ping"></span>
+                    <span class="mini-dot"></span>
+                    <span class="mini-label">Andheri</span>
+                  </div>
+                  <div class="mini-node node-bandra" style="top: 44%; left: 40%;" data-name="Bandra" title="Bandra: 188 AQI">
+                    <span class="mini-ping"></span>
+                    <span class="mini-dot"></span>
+                    <span class="mini-label">Bandra</span>
+                  </div>
+                  <div class="mini-node node-dadar" style="top: 60%; left: 46%;" data-name="Dadar" title="Dadar: 196 AQI">
+                    <span class="mini-ping"></span>
+                    <span class="mini-dot"></span>
+                    <span class="mini-label">Dadar</span>
+                  </div>
+                  <div class="mini-node node-kurla" style="top: 50%; left: 62%;" data-name="Kurla" title="Kurla: 218 AQI">
+                    <span class="mini-ping ping-crimson"></span>
+                    <span class="mini-dot dot-crimson"></span>
+                    <span class="mini-label">Kurla</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right: Ranked Top Hotspots Leaderboard -->
+              <div class="hotspots-leaderboard">
+                <div class="lb-header-row">
+                  <span class="lb-col-title">Top Hotspots</span>
+                  <span class="lb-col-metric">Sensor Readings</span>
+                </div>
+
+                <div class="lb-items-stack" id="hotspotsList">
+                  <!-- 1. Kurla -->
+                  <div class="lb-item" data-hotspot="Kurla">
+                    <div class="lb-rank-badge rank-1">1</div>
+                    <div class="lb-name-group">
+                      <span class="lb-name">Kurla</span>
+                      <span class="lb-tag">Industrial Zone</span>
+                    </div>
+                    <div class="lb-val-group">
+                      <span class="lb-val">218</span>
+                      <span class="lb-unit">AQI</span>
+                    </div>
+                  </div>
+
+                  <!-- 2. Bhandup -->
+                  <div class="lb-item" data-hotspot="Bhandup">
+                    <div class="lb-rank-badge rank-2">2</div>
+                    <div class="lb-name-group">
+                      <span class="lb-name">Bhandup</span>
+                      <span class="lb-tag">Manufacturing Hub</span>
+                    </div>
+                    <div class="lb-val-group">
+                      <span class="lb-val">204</span>
+                      <span class="lb-unit">AQI</span>
+                    </div>
+                  </div>
+
+                  <!-- 3. Dadar -->
+                  <div class="lb-item" data-hotspot="Dadar">
+                    <div class="lb-rank-badge rank-3">3</div>
+                    <div class="lb-name-group">
+                      <span class="lb-name">Dadar</span>
+                      <span class="lb-tag">Transit Intersection</span>
+                    </div>
+                    <div class="lb-val-group">
+                      <span class="lb-val">196</span>
+                      <span class="lb-unit">AQI</span>
+                    </div>
+                  </div>
+
+                  <!-- 4. Andheri -->
+                  <div class="lb-item" data-hotspot="Andheri">
+                    <div class="lb-rank-badge rank-gray">4</div>
+                    <div class="lb-name-group">
+                      <span class="lb-name">Andheri</span>
+                      <span class="lb-tag">Metro Corridor</span>
+                    </div>
+                    <div class="lb-val-group">
+                      <span class="lb-val">182</span>
+                      <span class="lb-unit">AQI</span>
+                    </div>
+                  </div>
+
+                  <!-- 5. Lower Parel -->
+                  <div class="lb-item" data-hotspot="Lower Parel">
+                    <div class="lb-rank-badge rank-gray">5</div>
+                    <div class="lb-name-group">
+                      <span class="lb-name">Lower Parel</span>
+                      <span class="lb-tag">High-Rise Cluster</span>
+                    </div>
+                    <div class="lb-val-group">
+                      <span class="lb-val">176</span>
+                      <span class="lb-unit">AQI</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div><!-- END hotspots-card -->
+
+          <!-- CARD 2: SOURCE CONTRIBUTION -->
+          <div class="analytics-card source-card" id="sourceCard">
+            <div class="card-header-bar">
+              <h2 class="card-title">Source Contribution</h2>
+              <div class="sc-info-pill">
+                <span class="info-dot"></span>
+                <span>AI Inversion Model</span>
+              </div>
+            </div>
+
+            <div class="source-grid-content">
+              <!-- Left: Donut Chart with Center AQI -->
+              <div class="donut-chart-wrapper">
+                <svg class="donut-svg" viewBox="0 0 200 200">
+                  <circle class="donut-bg-ring" cx="100" cy="100" r="74" />
+                  
+                  <!-- Slices: total perimeter = 2 * PI * 74 ≈ 464.95
+                       Vehicle Emissions: 34% => 158.08
+                       Industrial Activity: 28% => 130.18
+                       Construction Dust: 18% => 83.69
+                       Residential: 12% => 55.79
+                       Others: 8% => 37.20
+                  -->
+                  <circle class="donut-segment seg-others" cx="100" cy="100" r="74"
+                          stroke-dasharray="37.2 427.75" stroke-dashoffset="-427.75" data-source="Others" data-pct="8" />
+
+                  <circle class="donut-segment seg-residential" cx="100" cy="100" r="74"
+                          stroke-dasharray="55.79 409.16" stroke-dashoffset="-371.96" data-source="Residential" data-pct="12" />
+
+                  <circle class="donut-segment seg-construction" cx="100" cy="100" r="74"
+                          stroke-dasharray="83.69 381.26" stroke-dashoffset="-288.27" data-source="Construction Dust" data-pct="18" />
+
+                  <circle class="donut-segment seg-industrial" cx="100" cy="100" r="74"
+                          stroke-dasharray="130.18 334.77" stroke-dashoffset="-158.09" data-source="Industrial Activity" data-pct="28" />
+
+                  <circle class="donut-segment seg-vehicle" cx="100" cy="100" r="74"
+                          stroke-dasharray="158.08 306.87" stroke-dashoffset="0" data-source="Vehicle Emissions" data-pct="34" />
+                </svg>
+
+                <!-- Donut Center Text -->
+                <div class="donut-center-callout">
+                  <span class="donut-aqi-num" id="donutCenterAqi">168</span>
+                  <span class="donut-aqi-label">AQI</span>
+                </div>
+              </div>
+
+              <!-- Right: Legend with Exact Percentages -->
+              <div class="source-legend-list">
+                <div class="source-legend-item" data-source="Vehicle Emissions">
+                  <div class="sli-left">
+                    <span class="sli-dot dot-vehicle"></span>
+                    <span class="sli-name">Vehicle Emissions</span>
+                  </div>
+                  <span class="sli-percent" id="pctVehicle">34%</span>
+                </div>
+
+                <div class="source-legend-item" data-source="Industrial Activity">
+                  <div class="sli-left">
+                    <span class="sli-dot dot-industrial"></span>
+                    <span class="sli-name">Industrial Activity</span>
+                  </div>
+                  <span class="sli-percent" id="pctIndustrial">28%</span>
+                </div>
+
+                <div class="source-legend-item" data-source="Construction Dust">
+                  <div class="sli-left">
+                    <span class="sli-dot dot-construction"></span>
+                    <span class="sli-name">Construction Dust</span>
+                  </div>
+                  <span class="sli-percent" id="pctConstruction">18%</span>
+                </div>
+
+                <div class="source-legend-item" data-source="Residential">
+                  <div class="sli-left">
+                    <span class="sli-dot dot-residential"></span>
+                    <span class="sli-name">Residential</span>
+                  </div>
+                  <span class="sli-percent" id="pctResidential">12%</span>
+                </div>
+
+                <div class="source-legend-item" data-source="Others">
+                  <div class="sli-left">
+                    <span class="sli-dot dot-others"></span>
+                    <span class="sli-name">Others</span>
+                  </div>
+                  <span class="sli-percent" id="pctOthers">8%</span>
+                </div>
+              </div>
+
+            </div>
+          </div><!-- END source-card -->
+
+        </div><!-- END bottom-analytics-split -->
+
+      </section><!-- END stage-container -->
+
+    </main><!-- END dashboard-body -->
+
+  </div><!-- END app-layout -->
+
+  <!-- HOTSPOT TELEMETRY MODAL / FLYOUT -->
+  <div class="telemetry-popover hidden" id="telemetryPopover">
+    <div class="tp-header">
+      <div class="tp-badge-row">
+        <span class="tp-title" id="tpTitle">Lower Parel</span>
+        <span class="tp-aqi-pill" id="tpAqiPill">176 AQI</span>
+      </div>
+      <button class="tp-close-btn" id="tpCloseBtn">✕</button>
+    </div>
+    <div class="tp-body">
+      <div class="tp-stat-item">
+        <span class="tp-label">Dominant Sector:</span>
+        <span class="tp-val" id="tpSector">Commercial & Vehicular</span>
+      </div>
+      <div class="tp-stat-item">
+        <span class="tp-label">PM2.5 Peak Hour:</span>
+        <span class="tp-val">09:30 AM (92 µg/m³)</span>
+      </div>
+      <div class="tp-stat-item">
+        <span class="tp-label">Micro-Dispersion Index:</span>
+        <span class="tp-val text-amber">0.42 (Stagnant)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMAND PALETTE (⌘ K) MODAL -->
+  <div class="modal-overlay hidden" id="commandModalOverlay">
+    <div class="command-modal-card">
+      <div class="cmd-input-row">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" class="cmd-search-input" id="cmdInput" placeholder="Type a city, hotspot, pollutant, or policy action..." autofocus />
+        <kbd class="cmd-esc-badge" id="cmdCloseBtn">ESC</kbd>
+      </div>
+
+      <div class="cmd-results-list" id="cmdResults">
+        <div class="cmd-group-title">Digital Twin Districts</div>
+        <div class="cmd-item" data-action="focus-bandra">
+          <span class="cmd-icon">📍</span>
+          <span class="cmd-text">Bandra West & Sea Link</span>
+          <span class="cmd-tag">AQI 188</span>
+        </div>
+        <div class="cmd-item" data-action="focus-dadar">
+          <span class="cmd-icon">📍</span>
+          <span class="cmd-text">Dadar Central Junction</span>
+          <span class="cmd-tag">AQI 196</span>
+        </div>
+        <div class="cmd-item" data-action="focus-lowerparel">
+          <span class="cmd-icon">📍</span>
+          <span class="cmd-text">Lower Parel High-Rise District</span>
+          <span class="cmd-tag">AQI 176</span>
+        </div>
+        <div class="cmd-item" data-action="focus-kurla">
+          <span class="cmd-icon">📍</span>
+          <span class="cmd-text">Kurla Industrial Corridor</span>
+          <span class="cmd-tag">AQI 218</span>
+        </div>
+
+        <div class="cmd-group-title">Policy Interventions</div>
+        <div class="cmd-item" data-action="toggle-traffic">
+          <span class="cmd-icon">🚗</span>
+          <span class="cmd-text">Toggle Odd-Even Traffic Rationing</span>
+          <span class="cmd-tag">-22% PM2.5</span>
+        </div>
+        <div class="cmd-item" data-action="toggle-industrial">
+          <span class="cmd-icon">🏭</span>
+          <span class="cmd-text">Toggle Industrial Scrubbers & Fuel Transition</span>
+          <span class="cmd-tag">-28% PM2.5</span>
+        </div>
+        <div class="cmd-item" data-action="launch-sim">
+          <span class="cmd-icon">⚡</span>
+          <span class="cmd-text">Run Multimodal Monte Carlo Simulation</span>
+          <span class="cmd-tag">Execute</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RUN SCENARIO SIMULATION STUDIO MODAL -->
+  <div class="modal-overlay hidden" id="simModalOverlay">
+    <div class="sim-studio-modal">
+      <div class="sim-modal-header">
+        <div class="smh-left">
+          <div class="pulse-sparkle-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2">
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 class="smh-title">AI Atmospheric Scenario Simulator</h3>
+            <p class="smh-subtitle">High-fidelity predictive physics and chemical dispersion modeling</p>
+          </div>
+        </div>
+        <button class="modal-close-icon" id="simModalCloseBtn">✕</button>
+      </div>
+
+      <div class="sim-modal-body">
+        <div class="sim-sliders-col">
+          <div class="sim-slider-card">
+            <div class="ssc-head">
+              <span class="ssc-name">Electric Fleet Transition (%)</span>
+              <span class="ssc-val" id="valFleetSlider">45%</span>
+            </div>
+            <input type="range" class="sim-range" id="sliderFleet" min="0" max="100" value="45" />
+            <span class="ssc-desc">Reduces tailpipe particulate matter along coastal expressways</span>
+          </div>
+
+          <div class="sim-slider-card">
+            <div class="ssc-head">
+              <span class="ssc-name">Construction Dust Suppression (%)</span>
+              <span class="ssc-val" id="valDustSlider">60%</span>
+            </div>
+            <input type="range" class="sim-range" id="sliderDust" min="0" max="100" value="60" />
+            <span class="ssc-desc">Water mist cannons, windbreaks and green coverings at active sites</span>
+          </div>
+
+          <div class="sim-slider-card">
+            <div class="ssc-head">
+              <span class="ssc-name">Industrial Off-Peak Energy Shift</span>
+              <span class="ssc-val" id="valIndSlider">30%</span>
+            </div>
+            <input type="range" class="sim-range" id="sliderInd" min="0" max="100" value="30" />
+            <span class="ssc-desc">Rerouting manufacturing emission peaks during nocturnal atmospheric inversions</span>
+          </div>
+        </div>
+
+        <div class="sim-results-col">
+          <div class="sim-kpi-box">
+            <span class="kpi-label">Projected 24h AQI</span>
+            <span class="kpi-big" id="simProjectedAqi">108</span>
+            <span class="kpi-sub badge-green">Improved to Satisfactory</span>
+          </div>
+
+          <div class="sim-kpi-box">
+            <span class="kpi-label">Estimated Health Impact</span>
+            <span class="kpi-big text-emerald">-34%</span>
+            <span class="kpi-sub">Hospital respiratory admissions</span>
+          </div>
+
+          <button class="sim-commit-btn" id="applySimBtn">Apply Scenario to Live Twin</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main JavaScript App Entry -->
+  <script type="module" src="/src/scripts/main.js"></script>
+</body>
+</html>
