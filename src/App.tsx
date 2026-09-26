@@ -60,7 +60,7 @@ export const App: React.FC = () => {
       left: '50%',
     };
     setSelectedHotspot(fakeHotspot);
-    setPopoverPos({ top: 380, left: window.innerWidth * 0.45 });
+    setPopoverPos({ top: 340, left: window.innerWidth * 0.45 });
   };
 
   const handleCommandAction = (action: string) => {
@@ -90,32 +90,31 @@ export const App: React.FC = () => {
         onOpenCommand={() => setIsCommandOpen(true)}
       />
 
-      {/* Main Dashboard Layout */}
+      {/* 3-COLUMN MAIN DASHBOARD GRID (Full Viewport, Zero Empty Space) */}
       <main className="dashboard-body">
-        {/* Left Sidebar Floating Dock */}
+        {/* COLUMN 1: Left Sidebar Floating Dock */}
         <Sidebar activeView={activeNav} onSelectView={setActiveNav} />
 
-        {/* Center & Right Stage */}
-        <section className="stage-container">
-          {/* Upper Stage: Digital Twin Hero & Forecast Panel */}
-          <div className="hero-forecast-split">
-            <DigitalTwinViewer
-              currentCity={currentCity}
-              diurnalData={diurnalData}
-              currentHour={currentHour}
-              onHourChange={setCurrentHour}
-              onHotspotClick={handleHotspotClick}
-            />
+        {/* COLUMN 2: Center Stage (Hero Digital Twin Upper + Hotspots/Source Lower) */}
+        <div className="center-stage-column">
+          {/* Upper: Digital Twin Hero Viewport */}
+          <DigitalTwinViewer
+            currentCity={currentCity}
+            diurnalData={diurnalData}
+            currentHour={currentHour}
+            onHourChange={setCurrentHour}
+            onHotspotClick={handleHotspotClick}
+          />
 
-            <ForecastPanel onOpenSimulationModal={() => setIsSimModalOpen(true)} />
-          </div>
-
-          {/* Lower Stage: Pollution Hotspots & Source Contribution */}
+          {/* Lower: Pollution Hotspots & Source Contribution */}
           <div className="bottom-analytics-split">
             <HotspotsCard onSelectHotspot={handleSelectHotspotByName} />
             <SourceContributionCard currentAqi={diurnalData.aqi} />
           </div>
-        </section>
+        </div>
+
+        {/* COLUMN 3: Right Full-Height Panel (Forecast & Scenarios) */}
+        <ForecastPanel onOpenSimulationModal={() => setIsSimModalOpen(true)} />
       </main>
 
       {/* Modals & Popovers */}

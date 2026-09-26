@@ -43,7 +43,6 @@ export const Header: React.FC<HeaderProps> = ({ currentCity, onSelectCity, onOpe
         </div>
         <div className="brand-text-container">
           <span className="brand-title">VAYU</span>
-          <span className="brand-badge">PRO</span>
         </div>
       </div>
 
