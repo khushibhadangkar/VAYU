@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, MapPin, ChevronDown, Sun } from 'lucide-react';
+import { Search, MapPin, ChevronDown, Sun, BarChart2 } from 'lucide-react';
 import { CityOption } from '../types';
 
 interface HeaderProps {
@@ -7,6 +7,7 @@ interface HeaderProps {
   onSelectCity: (city: CityOption) => void;
   onOpenCommand: () => void;
   connectionStatus: 'connected' | 'fallback' | 'loading';
+  onOpenValidation?: () => void;
 }
 
 const CITIES: CityOption[] = [
@@ -17,7 +18,7 @@ const CITIES: CityOption[] = [
   { name: 'London', region: 'Greater London', aqi: 36, temp: 18, condition: 'Clear', wind: 'SW 14 km/h' },
 ];
 
-export const Header: React.FC<HeaderProps> = ({ currentCity, onSelectCity, onOpenCommand, connectionStatus }) => {
+export const Header: React.FC<HeaderProps> = ({ currentCity, onSelectCity, onOpenCommand, connectionStatus, onOpenValidation }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState('10:24 AM');
   const [currentDate, setCurrentDate] = useState('Mon, 22 Sept 2026');
@@ -83,6 +84,19 @@ export const Header: React.FC<HeaderProps> = ({ currentCity, onSelectCity, onOpe
             {connectionStatus === 'connected' ? 'Environmental API connected' : connectionStatus === 'fallback' ? 'Demo fallback active' : 'Connecting...'}
           </span>
         </div>
+
+        {/* Validation Toggle */}
+        {onOpenValidation && (
+          <button
+            className="pill-badge pill-connection"
+            style={{ padding: '0.4rem 0.75rem', gap: '5px', cursor: 'pointer', background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)' }}
+            onClick={onOpenValidation}
+            title="Open Historical Validation Panel"
+          >
+            <BarChart2 size={12} color="#10B981" />
+            <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#10B981' }}>Validation</span>
+          </button>
+        )}
 
         {/* City Selector Dropdown */}
         <div className={`city-selector-dropdown ${dropdownOpen ? 'open' : ''}`}>

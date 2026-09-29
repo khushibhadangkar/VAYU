@@ -8,8 +8,9 @@ import { SourceContributionCard } from './components/SourceContributionCard';
 import { CommandPalette } from './components/CommandPalette';
 import { ScenarioSimulationModal } from './components/ScenarioSimulationModal';
 import { TelemetryPopover } from './components/TelemetryPopover';
+import { ValidationPanel } from './components/ValidationPanel';
 import { CityOption, DiurnalData, Hotspot } from './types';
-import { api } from './services/api';
+import { api, HotspotItem } from './services/api';
 
 const DIURNAL_CYCLE: Record<number, DiurnalData> = {
   6:  { aqi: 184, pm25: 78, pm10: 128, no2: 52, so2: 9, o3: 64, desc: 'Morning Inversion Peak' },
@@ -33,11 +34,12 @@ export const App: React.FC = () => {
   const [activeNav, setActiveNav] = useState('overview');
   const [currentHour, setCurrentHour] = useState(12);
   const [connectionStatus, setConnectionStatus] = useState<'connected' | 'fallback' | 'loading'>('loading');
+  const [showValidation, setShowValidation] = useState(false);
 
   React.useEffect(() => {
     let isMounted = true;
     setConnectionStatus('loading');
-    
+
     api.getEnvironment(currentCity.name)
       .then(data => {
         if (!isMounted) return;
@@ -45,15 +47,15 @@ export const App: React.FC = () => {
           ...prev,
           aqi: data.air_quality.aqi,
           temp: data.weather.temperature,
-          wind: `${data.weather.wind_direction} ${data.weather.wind_speed} km/h`
+          wind: `${data.weather.wind_direction} ${data.weather.wind_speed} km/h`,
         }));
         setConnectionStatus(data.status === 'DEMO_FALLBACK' ? 'fallback' : 'connected');
       })
       .catch(err => {
-        console.error("API Error:", err);
+        console.error('API Error:', err);
         if (isMounted) setConnectionStatus('fallback');
       });
-      
+
     return () => { isMounted = false; };
   }, [currentCity.name]);
 
@@ -69,22 +71,30 @@ export const App: React.FC = () => {
     e.stopPropagation();
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
     setSelectedHotspot(hotspot);
-    setPopoverPos({
-      top: rect.top,
-      left: rect.left + rect.width / 2,
-    });
+    setPopoverPos({ top: rect.top, left: rect.left + rect.width / 2 });
   };
 
-  const handleSelectHotspotByName = (name: string) => {
-    const fakeHotspot: Hotspot = {
-      id: name.toLowerCase().replace(/\s+/g, ''),
+  /**
+   * Called from HotspotsCard — accepts an optional full HotspotItem from the backend.
+   * If provided, enriches the Hotspot with backend data for the popover.
+   */
+  const handleSelectHotspotByName = (name: string, hotspotData?: HotspotItem) => {
+    const enriched: Hotspot = {
+      id: hotspotData?.id ?? name.toLowerCase().replace(/\s+/g, ''),
       name,
-      aqi: name === 'Kurla' ? 218 : name === 'Dadar' ? 196 : 182,
-      category: 'Dense Urban Cluster & Arterial Highway',
-      top: '40%',
-      left: '50%',
+      aqi: hotspotData?.aqi ?? (name === 'Kurla' ? 218 : name === 'Dadar' ? 196 : 182),
+      category: hotspotData?.category ?? 'Dense Urban Cluster & Arterial Highway',
+      top: hotspotData?.minimap_top ?? '40%',
+      left: hotspotData?.minimap_left ?? '50%',
+      // Extended backend fields
+      primary_pollutant: hotspotData?.primary_pollutant,
+      severity: hotspotData?.severity,
+      pm25: hotspotData?.pm25,
+      pm10: hotspotData?.pm10,
+      notes: hotspotData?.notes,
+      source_types: hotspotData?.source_types,
     };
-    setSelectedHotspot(fakeHotspot);
+    setSelectedHotspot(enriched);
     setPopoverPos({ top: 340, left: window.innerWidth * 0.45 });
   };
 
@@ -102,7 +112,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="app-layout" onClick={() => setSelectedHotspot(null)}>
+    <div className="app-layout" onClick={() => { setSelectedHotspot(null); setShowValidation(false); }}>
       {/* Ambient Backing Glows */}
       <div className="ambient-glow glow-top-left"></div>
       <div className="ambient-glow glow-center-right"></div>
@@ -114,14 +124,15 @@ export const App: React.FC = () => {
         onSelectCity={setCurrentCity}
         onOpenCommand={() => setIsCommandOpen(true)}
         connectionStatus={connectionStatus}
+        onOpenValidation={() => setShowValidation(v => !v)}
       />
 
-      {/* 3-COLUMN MAIN DASHBOARD GRID (Full Viewport, Zero Empty Space) */}
+      {/* 3-COLUMN MAIN DASHBOARD GRID */}
       <main className="dashboard-body">
         {/* COLUMN 1: Left Sidebar Floating Dock */}
         <Sidebar activeView={activeNav} onSelectView={setActiveNav} />
 
-        {/* COLUMN 2: Center Stage (Hero Digital Twin Upper + Hotspots/Source Lower) */}
+        {/* COLUMN 2: Center Stage */}
         <div className="center-stage-column">
           {/* Upper: Digital Twin Hero Viewport */}
           <DigitalTwinViewer
@@ -134,13 +145,47 @@ export const App: React.FC = () => {
 
           {/* Lower: Pollution Hotspots & Source Contribution */}
           <div className="bottom-analytics-split">
-            <HotspotsCard onSelectHotspot={handleSelectHotspotByName} />
-            <SourceContributionCard currentAqi={diurnalData.aqi} />
+            <HotspotsCard
+              city={currentCity.name}
+              onSelectHotspot={handleSelectHotspotByName}
+            />
+            <SourceContributionCard
+              city={currentCity.name}
+              currentAqi={diurnalData.aqi}
+            />
           </div>
         </div>
 
-        {/* COLUMN 3: Right Full-Height Panel (Forecast & Scenarios) */}
-        <ForecastPanel onOpenSimulationModal={() => setIsSimModalOpen(true)} />
+        {/* COLUMN 3: Right Full-Height Panel */}
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <ForecastPanel
+            city={currentCity.name}
+            onOpenSimulationModal={() => setIsSimModalOpen(true)}
+          />
+
+          {/* Validation Panel — slides in below ForecastPanel when toggled */}
+          {showValidation && (
+            <div
+              className="forecast-panel-card"
+              style={{ marginTop: '12px', flexShrink: 0 }}
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="forecast-panel-header" style={{ marginBottom: '8px' }}>
+                <h2 className="fph-title" style={{ fontSize: '0.85rem' }}>
+                  Historical Validation
+                </h2>
+                <button
+                  className="fph-expand-btn"
+                  onClick={() => setShowValidation(false)}
+                  title="Close Validation"
+                >
+                  ✕
+                </button>
+              </div>
+              <ValidationPanel city={currentCity.name} />
+            </div>
+          )}
+        </div>
       </main>
 
       {/* Modals & Popovers */}
@@ -158,6 +203,7 @@ export const App: React.FC = () => {
 
       <ScenarioSimulationModal
         isOpen={isSimModalOpen}
+        city={currentCity.name}
         onClose={() => setIsSimModalOpen(false)}
         onApplyScenario={handleApplyScenario}
       />

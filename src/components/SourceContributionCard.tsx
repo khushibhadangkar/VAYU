@@ -1,31 +1,91 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { api, SourceItem } from '../services/api';
 
 interface SourceContributionCardProps {
+  city: string;
   currentAqi: number;
 }
 
-const SOURCES = [
-  { name: 'Vehicle Emissions', pct: 34, color: 'var(--donut-vehicle)', dotClass: 'dot-vehicle', segClass: 'seg-vehicle', offset: 0, dash: '158.08 306.87' },
-  { name: 'Industrial Activity', pct: 28, color: 'var(--donut-industrial)', dotClass: 'dot-industrial', segClass: 'seg-industrial', offset: -158.09, dash: '130.18 334.77' },
-  { name: 'Construction Dust', pct: 18, color: 'var(--donut-construction)', dotClass: 'dot-construction', segClass: 'seg-construction', offset: -288.27, dash: '83.69 381.26' },
-  { name: 'Residential', pct: 12, color: 'var(--donut-residential)', dotClass: 'dot-residential', segClass: 'seg-residential', offset: -371.96, dash: '55.79 409.16' },
-  { name: 'Others', pct: 8, color: 'var(--donut-others)', dotClass: 'dot-others', segClass: 'seg-others', offset: -427.75, dash: '37.2 427.75' },
-];
+// CSS variable keys per position (preserved from original design)
+const COLOR_KEYS = ['vehicle', 'industrial', 'construction', 'residential', 'others'];
+const SEG_CLASSES = ['seg-vehicle', 'seg-industrial', 'seg-construction', 'seg-residential', 'seg-others'];
+const DOT_CLASSES = ['dot-vehicle', 'dot-industrial', 'dot-construction', 'dot-residential', 'dot-others'];
 
-export const SourceContributionCard: React.FC<SourceContributionCardProps> = ({ currentAqi }) => {
+// Pre-computed donut segment offsets/dashes for up to 5 sources summing to 100%
+// These are rebuilt dynamically from API percentages below.
+const CIRCUMFERENCE = 2 * Math.PI * 74; // r=74 → ≈ 465.0
+
+function buildSegments(sources: SourceItem[]) {
+  let cumulativePct = 0;
+  return sources.map((s, i) => {
+    const dash = (s.percentage / 100) * CIRCUMFERENCE;
+    const gap = CIRCUMFERENCE - dash;
+    const offset = -(cumulativePct / 100) * CIRCUMFERENCE;
+    cumulativePct += s.percentage;
+    return {
+      ...s,
+      segClass: SEG_CLASSES[i] || SEG_CLASSES[SEG_CLASSES.length - 1],
+      dotClass: DOT_CLASSES[i] || DOT_CLASSES[DOT_CLASSES.length - 1],
+      dashStr: `${dash.toFixed(2)} ${gap.toFixed(2)}`,
+      offset,
+    };
+  });
+}
+
+function getStatusLabel(status: string): { label: string; color: string } {
+  if (status === 'MODELED_ATTRIBUTION') return { label: 'MODELLED ATTRIBUTION', color: '#F59E0B' };
+  if (status === 'DEMO_FALLBACK') return { label: 'DEMO FALLBACK', color: '#9CA3AF' };
+  return { label: status, color: '#9CA3AF' };
+}
+
+export const SourceContributionCard: React.FC<SourceContributionCardProps> = ({ city, currentAqi }) => {
+  const [segments, setSegments] = useState<ReturnType<typeof buildSegments>>([]);
+  const [apiMethod, setApiMethod] = useState<string>('Modeled Source Attribution');
+  const [dataStatus, setDataStatus] = useState<string>('loading');
   const [hoveredSource, setHoveredSource] = useState<string | null>(null);
 
-  const activeItem = SOURCES.find((s) => s.name === hoveredSource);
-  const centerDisplay = activeItem ? `${activeItem.pct}%` : currentAqi;
+  useEffect(() => {
+    let mounted = true;
+    setDataStatus('loading');
+
+    api.getSources(city)
+      .then(data => {
+        if (!mounted) return;
+        setSegments(buildSegments(data.sources));
+        setApiMethod(data.method || 'Modeled Source Attribution');
+        setDataStatus(data.status);
+      })
+      .catch(() => {
+        if (!mounted) return;
+        // Use hardcoded fallback if API fails
+        const fallback: SourceItem[] = [
+          { name: 'Vehicle Emissions', percentage: 34, primary_pollutant: 'PM2.5', color_key: 'vehicle', notes: '' },
+          { name: 'Industrial Activity', percentage: 28, primary_pollutant: 'SO2', color_key: 'industrial', notes: '' },
+          { name: 'Construction Dust', percentage: 18, primary_pollutant: 'PM10', color_key: 'construction', notes: '' },
+          { name: 'Residential', percentage: 12, primary_pollutant: 'PM2.5', color_key: 'residential', notes: '' },
+          { name: 'Others', percentage: 8, primary_pollutant: 'Mixed', color_key: 'others', notes: '' },
+        ];
+        setSegments(buildSegments(fallback));
+        setDataStatus('DEMO_FALLBACK');
+      });
+
+    return () => { mounted = false; };
+  }, [city]);
+
+  const activeItem = segments.find((s) => s.name === hoveredSource);
+  const centerDisplay = activeItem ? `${activeItem.percentage}%` : currentAqi;
   const centerSub = activeItem ? activeItem.name : 'AQI';
+  const statusLabel = getStatusLabel(dataStatus);
 
   return (
     <div className="analytics-card source-card">
       <div className="card-header-bar">
         <h2 className="card-title">Source Contribution</h2>
         <div className="sc-info-pill">
-          <span className="info-dot"></span>
-          <span>Modeled Source Attribution</span>
+          <span className="info-dot" style={{ background: statusLabel.color }}></span>
+          <span style={{ color: statusLabel.color, fontSize: '0.65rem', fontWeight: 600 }}>
+            {statusLabel.label}
+          </span>
         </div>
       </div>
 
@@ -34,7 +94,7 @@ export const SourceContributionCard: React.FC<SourceContributionCardProps> = ({ 
         <div className="donut-chart-wrapper">
           <svg className="donut-svg" viewBox="0 0 200 200">
             <circle className="donut-bg-ring" cx="100" cy="100" r="74" />
-            {SOURCES.map((s) => {
+            {segments.map((s) => {
               const isHovered = hoveredSource === s.name;
               return (
                 <circle
@@ -43,7 +103,7 @@ export const SourceContributionCard: React.FC<SourceContributionCardProps> = ({ 
                   cx="100"
                   cy="100"
                   r="74"
-                  strokeDasharray={s.dash}
+                  strokeDasharray={s.dashStr}
                   strokeDashoffset={s.offset}
                   style={{
                     strokeWidth: isHovered ? 30 : 24,
@@ -66,7 +126,7 @@ export const SourceContributionCard: React.FC<SourceContributionCardProps> = ({ 
 
         {/* Right: Legend Breakdown */}
         <div className="source-legend-list">
-          {SOURCES.map((s) => {
+          {segments.map((s) => {
             const isHovered = hoveredSource === s.name;
             return (
               <div
@@ -83,10 +143,15 @@ export const SourceContributionCard: React.FC<SourceContributionCardProps> = ({ 
                   <span className={`sli-dot ${s.dotClass}`}></span>
                   <span className="sli-name">{s.name}</span>
                 </div>
-                <span className="sli-percent">{s.pct}%</span>
+                <span className="sli-percent">{s.percentage}%</span>
               </div>
             );
           })}
+          {dataStatus === 'loading' && (
+            <div style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', padding: '4px 0' }}>
+              Loading source data…
+            </div>
+          )}
         </div>
       </div>
     </div>

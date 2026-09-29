@@ -26,6 +26,13 @@ export type Hotspot = {
   left: string;
   pulseClass?: string;
   coreClass?: string;
+  // Extended backend fields (optional — may be absent for locally constructed hotspots)
+  primary_pollutant?: string;
+  severity?: string;
+  pm25?: number;
+  pm10?: number;
+  notes?: string;
+  source_types?: string[];
 };
 
 export type SourceContribution = {
@@ -34,3 +41,12 @@ export type SourceContribution = {
   color: string;
   className: string;
 };
+
+/** Data provenance status labels used across the application */
+export type DataStatus =
+  | 'OBSERVED'
+  | 'MODEL_FORECAST'
+  | 'MODELED_ATTRIBUTION'
+  | 'SCENARIO'
+  | 'HISTORICAL_VALIDATION'
+  | 'DEMO_FALLBACK';
