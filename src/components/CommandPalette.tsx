@@ -27,13 +27,18 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
   if (!isOpen) return null;
 
   const items = [
-    { group: 'Digital Twin Districts', action: 'focus-bandra', icon: '📍', label: 'Bandra West & Sea Link', tag: 'AQI 188' },
-    { group: 'Digital Twin Districts', action: 'focus-dadar', icon: '📍', label: 'Dadar Central Junction', tag: 'AQI 196' },
-    { group: 'Digital Twin Districts', action: 'focus-lowerparel', icon: '📍', label: 'Lower Parel High-Rise District', tag: 'AQI 176' },
-    { group: 'Digital Twin Districts', action: 'focus-kurla', icon: '📍', label: 'Kurla Industrial Corridor', tag: 'AQI 218' },
-    { group: 'Policy Interventions', action: 'toggle-traffic', icon: '🚗', label: 'Toggle Odd-Even Traffic Rationing', tag: '-22% PM2.5' },
-    { group: 'Policy Interventions', action: 'toggle-industrial', icon: '🏭', label: 'Toggle Industrial Scrubbers & Fuel Transition', tag: '-28% PM2.5' },
-    { group: 'Policy Interventions', action: 'launch-sim', icon: '⚡', label: 'Run Multimodal Monte Carlo Simulation', tag: 'Execute' },
+    { group: 'Navigation', action: 'nav-overview', icon: '🏠', label: 'Go to Overview', tag: 'Dashboard' },
+    { group: 'Navigation', action: 'nav-digital-twin', icon: '🏙️', label: 'Go to Digital Twin', tag: 'Map' },
+    { group: 'Navigation', action: 'nav-hotspots', icon: '🎯', label: 'Go to Hotspots', tag: 'Analytics' },
+    { group: 'Navigation', action: 'nav-sources', icon: 'pie_chart', label: 'Go to Sources', tag: 'Analytics' },
+    { group: 'Navigation', action: 'nav-forecast', icon: '📈', label: 'Go to Forecast', tag: 'Prediction' },
+    { group: 'Navigation', action: 'nav-scenarios', icon: '⚡', label: 'Go to Scenarios', tag: 'Simulation' },
+    { group: 'Navigation', action: 'nav-validation', icon: '✅', label: 'Go to Validation', tag: 'Trust' },
+    { group: 'Navigation', action: 'nav-data-trust', icon: 'ℹ️', label: 'Go to Data / Trust', tag: 'Provenance' },
+    { group: 'Digital Twin Districts', action: 'focus-bandra', icon: '📍', label: 'Focus Bandra West', tag: 'Hotspot' },
+    { group: 'Digital Twin Districts', action: 'focus-dadar', icon: '📍', label: 'Focus Dadar Central', tag: 'Hotspot' },
+    { group: 'Digital Twin Districts', action: 'focus-lowerparel', icon: '📍', label: 'Focus Lower Parel', tag: 'Hotspot' },
+    { group: 'Digital Twin Districts', action: 'focus-kurla', icon: '📍', label: 'Focus Kurla Industrial', tag: 'Hotspot' },
   ];
 
   const filtered = items.filter((item) =>

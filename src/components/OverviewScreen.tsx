@@ -5,9 +5,10 @@ import { api } from '../services/api';
 
 interface OverviewScreenProps {
   currentCity: CityOption;
+  onSelectView: (view: string) => void;
 }
 
-export const OverviewScreen: React.FC<OverviewScreenProps> = ({ currentCity }) => {
+export const OverviewScreen: React.FC<OverviewScreenProps> = ({ currentCity, onSelectView }) => {
   const [forecastSummary, setForecastSummary] = useState<any>(null);
   const [sourcesSummary, setSourcesSummary] = useState<any>(null);
   const [hotspotsSummary, setHotspotsSummary] = useState<any>(null);
@@ -41,20 +42,20 @@ export const OverviewScreen: React.FC<OverviewScreenProps> = ({ currentCity }) =
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '10px 10px', height: '100%', overflowY: 'auto' }}>
       
       {/* Hero Intro */}
-      <div style={{ ...cardStyle }}>
-        <h1 style={{ fontSize: '1.8rem', fontWeight: 700, color: primaryText, marginBottom: '8px', fontFamily: 'Outfit, sans-serif' }}>
+      <div style={{ ...cardStyle, padding: '32px' }}>
+        <h1 style={{ fontSize: '2.2rem', fontWeight: 800, color: primaryText, marginBottom: '12px', fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.02em' }}>
           Environmental Intelligence Summary: {currentCity.name}
         </h1>
-        <p style={{ color: secondaryText, fontSize: '0.95rem', maxWidth: '800px', lineHeight: 1.5 }}>
+        <p style={{ color: secondaryText, fontSize: '1.05rem', maxWidth: '800px', lineHeight: 1.6 }}>
           VAYU provides a complete digital twin of urban air quality. This overview synthesizes live observations, modeled source attribution, deterministic forecasting, and historical validation into actionable intelligence.
         </p>
         
         {/* Automated Insights */}
-        <div style={{ marginTop: '20px', padding: '16px', background: 'rgba(2, 132, 199, 0.05)', borderRadius: '12px', borderLeft: '4px solid #0284c7' }}>
-          <h3 style={{ fontSize: '0.9rem', fontWeight: 700, color: '#0284c7', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Activity size={16} /> Automated Insights
+        <div style={{ marginTop: '24px', padding: '20px', background: 'rgba(2, 132, 199, 0.04)', borderRadius: '16px', borderLeft: '4px solid #0284c7' }}>
+          <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#0284c7', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Activity size={18} /> Automated Insights
           </h3>
-          <ul style={{ margin: 0, paddingLeft: '20px', color: secondaryText, fontSize: '0.85rem', lineHeight: 1.6 }}>
+          <ul style={{ margin: 0, paddingLeft: '24px', color: secondaryText, fontSize: '0.95rem', lineHeight: 1.8 }}>
             {currentCity.aqi > 150 && (
               <li><strong>Observation:</strong> Air quality is currently {currentCity.aqi > 200 ? 'Poor' : 'Moderate'}. {currentCity.aqi > 200 ? 'Sensitive groups should limit prolonged outdoor exertion.' : ''}</li>
             )}
@@ -74,6 +75,22 @@ export const OverviewScreen: React.FC<OverviewScreenProps> = ({ currentCity }) =
               <li><strong>Confidence:</strong> Historical validation available for the current model (MAE: {validationSummary.metrics.mae} AQI).</li>
             )}
           </ul>
+        </div>
+        
+        {/* Quick Actions */}
+        <div style={{ marginTop: '28px', display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+          <button onClick={() => onSelectView('digital-twin')} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#0f172a', color: 'white', border: 'none', padding: '14px 20px', borderRadius: '12px', fontSize: '0.95rem', fontWeight: 600, cursor: 'pointer', transition: 'transform 0.2s, background 0.2s', boxShadow: '0 4px 12px rgba(15,23,42,0.15)' }}>
+            Explore Digital Twin
+          </button>
+          <button onClick={() => onSelectView('hotspots')} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(255,255,255,0.9)', border: '1px solid #cbd5e1', padding: '14px 20px', borderRadius: '12px', fontSize: '0.95rem', fontWeight: 600, cursor: 'pointer', color: '#0f172a', transition: 'background 0.2s' }}>
+            View Hotspots
+          </button>
+          <button onClick={() => onSelectView('forecast')} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(255,255,255,0.9)', border: '1px solid #cbd5e1', padding: '14px 20px', borderRadius: '12px', fontSize: '0.95rem', fontWeight: 600, cursor: 'pointer', color: '#0f172a', transition: 'background 0.2s' }}>
+            View Forecast
+          </button>
+          <button onClick={() => onSelectView('scenarios')} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(255,255,255,0.9)', border: '1px solid #cbd5e1', padding: '14px 20px', borderRadius: '12px', fontSize: '0.95rem', fontWeight: 600, cursor: 'pointer', color: '#0f172a', transition: 'background 0.2s' }}>
+            Run Scenario
+          </button>
         </div>
       </div>
 

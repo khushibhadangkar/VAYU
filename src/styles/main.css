@@ -46,10 +46,11 @@
   --donut-residential: #907ad6;
   --donut-others: #8e9cae;
 
-  /* Typography Stacks — All Times New Roman */
-  --font-serif: "Times New Roman", Times, Baskerville, Georgia, serif;
-  --font-sans: "Times New Roman", Times, Baskerville, Georgia, serif;
-  --font-mono: "Times New Roman", Times, Georgia, serif;
+  /* Typography Stacks — Apple Grade Modern UI */
+  --font-serif: "Georgia", serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-mono: "SF Mono", "Consolas", monospace;
+  --font-display: "Outfit", -apple-system, sans-serif;
 
   /* Shadows */
   --shadow-sm: 0 2px 8px rgba(10, 25, 45, 0.04);
@@ -75,7 +76,6 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: "Times New Roman", Times, Baskerville, Georgia, serif !important;
 }
 
 html, body {
@@ -85,9 +85,9 @@ html, body {
   background-image: var(--bg-gradient);
   background-attachment: fixed;
   color: var(--text-primary);
-  font-family: "Times New Roman", Times, Baskerville, Georgia, serif !important;
-  font-size: 13.5px;
-  line-height: 1.45;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;

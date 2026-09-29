@@ -6,7 +6,7 @@ import { ForecastPanel } from './components/ForecastPanel';
 import { HotspotsCard } from './components/HotspotsCard';
 import { SourceContributionCard } from './components/SourceContributionCard';
 import { CommandPalette } from './components/CommandPalette';
-import { ScenarioSimulationModal } from './components/ScenarioSimulationModal';
+import { ScenarioPanel } from './components/ScenarioSimulationModal';
 import { TelemetryPopover } from './components/TelemetryPopover';
 import { ValidationPanel } from './components/ValidationPanel';
 import { OverviewScreen } from './components/OverviewScreen';
@@ -96,11 +96,12 @@ export const App: React.FC = () => {
   };
 
   const handleCommandAction = (action: string) => {
-    if (action.startsWith('focus-')) {
+    if (action.startsWith('nav-')) {
+      setActiveNav(action.replace('nav-', ''));
+    } else if (action.startsWith('focus-')) {
       const place = action.replace('focus-', '');
       handleSelectHotspotByName(place.charAt(0).toUpperCase() + place.slice(1));
-    } else if (action === 'launch-sim') {
-      setIsSimModalOpen(true);
+      setActiveNav('hotspots');
     }
   };
 
@@ -110,16 +111,28 @@ export const App: React.FC = () => {
 
   const renderContent = () => {
     switch (activeNav) {
+      case 'scenarios':
+        return (
+          <div className="center-stage-column" style={{ gridColumn: '2 / 4', overflowY: 'auto' }}>
+            <ScenarioPanel
+              isOpen={true}
+              city={currentCity.name}
+              onClose={() => setActiveNav('overview')}
+              onApplyScenario={handleApplyScenario}
+            />
+          </div>
+        );
+
       case 'overview':
         return (
-          <div style={{ gridColumn: '2 / 4' }}>
-            <OverviewScreen currentCity={currentCity} />
+          <div className="center-stage-column" style={{ gridColumn: '2 / 4', overflowY: 'auto' }}>
+            <OverviewScreen currentCity={currentCity} onSelectView={setActiveNav} />
           </div>
         );
 
       case 'digital-twin':
         return (
-          <div className="center-stage-column" style={{ gridColumn: '2 / 4' }}>
+          <div className="center-stage-column" style={{ gridColumn: '2 / 4', overflowY: 'auto' }}>
             <DigitalTwinViewer
               currentCity={currentCity}
               diurnalData={diurnalData}
@@ -132,7 +145,7 @@ export const App: React.FC = () => {
 
       case 'hotspots':
         return (
-          <div className="center-stage-column" style={{ gridColumn: '2 / 4' }}>
+          <div className="center-stage-column" style={{ gridColumn: '2 / 4', overflowY: 'auto' }}>
             <DigitalTwinViewer
               currentCity={currentCity}
               diurnalData={diurnalData}
@@ -148,7 +161,7 @@ export const App: React.FC = () => {
 
       case 'sources':
         return (
-          <div className="center-stage-column" style={{ gridColumn: '2 / 4' }}>
+          <div className="center-stage-column" style={{ gridColumn: '2 / 4', overflowY: 'auto' }}>
             <DigitalTwinViewer
               currentCity={currentCity}
               diurnalData={diurnalData}
@@ -180,19 +193,6 @@ export const App: React.FC = () => {
           </>
         );
 
-      case 'scenarios':
-        return (
-          <div className="center-stage-column" style={{ gridColumn: '2 / 4' }}>
-            <DigitalTwinViewer
-              currentCity={currentCity}
-              diurnalData={diurnalData}
-              currentHour={currentHour}
-              onHourChange={setCurrentHour}
-              onHotspotClick={handleHotspotClick}
-            />
-          </div>
-        );
-
       case 'validation':
         return (
           <>
@@ -216,7 +216,7 @@ export const App: React.FC = () => {
 
       case 'data-trust':
         return (
-          <div style={{ gridColumn: '2 / 4' }}>
+          <div style={{ gridColumn: '2 / 4', overflowY: 'auto', height: '100%' }}>
             <DataTrustPanel />
           </div>
         );
@@ -225,13 +225,6 @@ export const App: React.FC = () => {
         return null;
     }
   };
-
-  // Automatically open scenario modal if 'scenarios' tab is clicked
-  React.useEffect(() => {
-    if (activeNav === 'scenarios') {
-      setIsSimModalOpen(true);
-    }
-  }, [activeNav]);
 
   return (
     <div className="app-layout" onClick={() => { setSelectedHotspot(null); setShowValidation(false); }}>
@@ -271,15 +264,6 @@ export const App: React.FC = () => {
         onSelectAction={handleCommandAction}
       />
 
-      <ScenarioSimulationModal
-        isOpen={isSimModalOpen}
-        city={currentCity.name}
-        onClose={() => {
-          setIsSimModalOpen(false);
-          if (activeNav === 'scenarios') setActiveNav('overview');
-        }}
-        onApplyScenario={handleApplyScenario}
-      />
     </div>
   );
 };
