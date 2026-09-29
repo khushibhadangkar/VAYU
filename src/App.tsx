@@ -9,12 +9,14 @@ import { CommandPalette } from './components/CommandPalette';
 import { ScenarioSimulationModal } from './components/ScenarioSimulationModal';
 import { TelemetryPopover } from './components/TelemetryPopover';
 import { ValidationPanel } from './components/ValidationPanel';
+import { OverviewScreen } from './components/OverviewScreen';
+import { DataTrustPanel } from './components/DataTrustPanel';
 import { CityOption, DiurnalData, Hotspot } from './types';
 import { api, HotspotItem } from './services/api';
 
 const DIURNAL_CYCLE: Record<number, DiurnalData> = {
-  6:  { aqi: 184, pm25: 78, pm10: 128, no2: 52, so2: 9, o3: 64, desc: 'Morning Inversion Peak' },
-  9:  { aqi: 198, pm25: 88, pm10: 142, no2: 68, so2: 11, o3: 78, desc: 'Rush Hour Congestion' },
+  6: { aqi: 184, pm25: 78, pm10: 128, no2: 52, so2: 9, o3: 64, desc: 'Morning Inversion Peak' },
+  9: { aqi: 198, pm25: 88, pm10: 142, no2: 68, so2: 11, o3: 78, desc: 'Rush Hour Congestion' },
   12: { aqi: 168, pm25: 68, pm10: 112, no2: 42, so2: 8, o3: 96, desc: 'Moderate Afternoon' },
   15: { aqi: 144, pm25: 54, pm10: 96, no2: 36, so2: 7, o3: 110, desc: 'Coastal Sea Breeze Dispersion' },
   18: { aqi: 182, pm25: 76, pm10: 124, no2: 58, so2: 9, o3: 84, desc: 'Evening Commute Inversion' },
@@ -74,10 +76,6 @@ export const App: React.FC = () => {
     setPopoverPos({ top: rect.top, left: rect.left + rect.width / 2 });
   };
 
-  /**
-   * Called from HotspotsCard — accepts an optional full HotspotItem from the backend.
-   * If provided, enriches the Hotspot with backend data for the popover.
-   */
   const handleSelectHotspotByName = (name: string, hotspotData?: HotspotItem) => {
     const enriched: Hotspot = {
       id: hotspotData?.id ?? name.toLowerCase().replace(/\s+/g, ''),
@@ -86,7 +84,6 @@ export const App: React.FC = () => {
       category: hotspotData?.category ?? 'Dense Urban Cluster & Arterial Highway',
       top: hotspotData?.minimap_top ?? '40%',
       left: hotspotData?.minimap_left ?? '50%',
-      // Extended backend fields
       primary_pollutant: hotspotData?.primary_pollutant,
       severity: hotspotData?.severity,
       pm25: hotspotData?.pm25,
@@ -111,6 +108,131 @@ export const App: React.FC = () => {
     setCurrentCity((prev) => ({ ...prev, aqi: projectedAqi }));
   };
 
+  const renderContent = () => {
+    switch (activeNav) {
+      case 'overview':
+        return (
+          <div style={{ gridColumn: '2 / 4' }}>
+            <OverviewScreen currentCity={currentCity} />
+          </div>
+        );
+
+      case 'digital-twin':
+        return (
+          <div className="center-stage-column" style={{ gridColumn: '2 / 4' }}>
+            <DigitalTwinViewer
+              currentCity={currentCity}
+              diurnalData={diurnalData}
+              currentHour={currentHour}
+              onHourChange={setCurrentHour}
+              onHotspotClick={handleHotspotClick}
+            />
+          </div>
+        );
+
+      case 'hotspots':
+        return (
+          <div className="center-stage-column" style={{ gridColumn: '2 / 4' }}>
+            <DigitalTwinViewer
+              currentCity={currentCity}
+              diurnalData={diurnalData}
+              currentHour={currentHour}
+              onHourChange={setCurrentHour}
+              onHotspotClick={handleHotspotClick}
+            />
+            <div style={{ display: 'flex', gap: '14px', flexShrink: 0 }}>
+              <HotspotsCard city={currentCity.name} onSelectHotspot={handleSelectHotspotByName} />
+            </div>
+          </div>
+        );
+
+      case 'sources':
+        return (
+          <div className="center-stage-column" style={{ gridColumn: '2 / 4' }}>
+            <DigitalTwinViewer
+              currentCity={currentCity}
+              diurnalData={diurnalData}
+              currentHour={currentHour}
+              onHourChange={setCurrentHour}
+              onHotspotClick={handleHotspotClick}
+            />
+            <div style={{ display: 'flex', gap: '14px', flexShrink: 0 }}>
+              <SourceContributionCard city={currentCity.name} currentAqi={diurnalData.aqi} />
+            </div>
+          </div>
+        );
+
+      case 'forecast':
+        return (
+          <>
+            <div className="center-stage-column">
+              <DigitalTwinViewer
+                currentCity={currentCity}
+                diurnalData={diurnalData}
+                currentHour={currentHour}
+                onHourChange={setCurrentHour}
+                onHotspotClick={handleHotspotClick}
+              />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflowY: 'auto' }}>
+              <ForecastPanel city={currentCity.name} onOpenSimulationModal={() => setIsSimModalOpen(true)} />
+            </div>
+          </>
+        );
+
+      case 'scenarios':
+        return (
+          <div className="center-stage-column" style={{ gridColumn: '2 / 4' }}>
+            <DigitalTwinViewer
+              currentCity={currentCity}
+              diurnalData={diurnalData}
+              currentHour={currentHour}
+              onHourChange={setCurrentHour}
+              onHotspotClick={handleHotspotClick}
+            />
+          </div>
+        );
+
+      case 'validation':
+        return (
+          <>
+            <div className="center-stage-column">
+              <DigitalTwinViewer
+                currentCity={currentCity}
+                diurnalData={diurnalData}
+                currentHour={currentHour}
+                onHourChange={setCurrentHour}
+                onHotspotClick={handleHotspotClick}
+              />
+            </div>
+            <div className="forecast-panel-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', overflowY: 'auto', flex: 1 }}>
+              <div className="forecast-panel-header" style={{ marginBottom: '8px' }}>
+                <h2 className="fph-title">Historical Validation</h2>
+              </div>
+              <ValidationPanel city={currentCity.name} />
+            </div>
+          </>
+        );
+
+      case 'data-trust':
+        return (
+          <div style={{ gridColumn: '2 / 4' }}>
+            <DataTrustPanel />
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  // Automatically open scenario modal if 'scenarios' tab is clicked
+  React.useEffect(() => {
+    if (activeNav === 'scenarios') {
+      setIsSimModalOpen(true);
+    }
+  }, [activeNav]);
+
   return (
     <div className="app-layout" onClick={() => { setSelectedHotspot(null); setShowValidation(false); }}>
       {/* Ambient Backing Glows */}
@@ -124,7 +246,7 @@ export const App: React.FC = () => {
         onSelectCity={setCurrentCity}
         onOpenCommand={() => setIsCommandOpen(true)}
         connectionStatus={connectionStatus}
-        onOpenValidation={() => setShowValidation(v => !v)}
+        onOpenValidation={() => setActiveNav('validation')}
       />
 
       {/* 3-COLUMN MAIN DASHBOARD GRID */}
@@ -132,60 +254,8 @@ export const App: React.FC = () => {
         {/* COLUMN 1: Left Sidebar Floating Dock */}
         <Sidebar activeView={activeNav} onSelectView={setActiveNav} />
 
-        {/* COLUMN 2: Center Stage */}
-        <div className="center-stage-column">
-          {/* Upper: Digital Twin Hero Viewport */}
-          <DigitalTwinViewer
-            currentCity={currentCity}
-            diurnalData={diurnalData}
-            currentHour={currentHour}
-            onHourChange={setCurrentHour}
-            onHotspotClick={handleHotspotClick}
-          />
-
-          {/* Lower: Pollution Hotspots & Source Contribution */}
-          <div className="bottom-analytics-split">
-            <HotspotsCard
-              city={currentCity.name}
-              onSelectHotspot={handleSelectHotspotByName}
-            />
-            <SourceContributionCard
-              city={currentCity.name}
-              currentAqi={diurnalData.aqi}
-            />
-          </div>
-        </div>
-
-        {/* COLUMN 3: Right Full-Height Panel */}
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-          <ForecastPanel
-            city={currentCity.name}
-            onOpenSimulationModal={() => setIsSimModalOpen(true)}
-          />
-
-          {/* Validation Panel — slides in below ForecastPanel when toggled */}
-          {showValidation && (
-            <div
-              className="forecast-panel-card"
-              style={{ marginTop: '12px', flexShrink: 0 }}
-              onClick={e => e.stopPropagation()}
-            >
-              <div className="forecast-panel-header" style={{ marginBottom: '8px' }}>
-                <h2 className="fph-title" style={{ fontSize: '0.85rem' }}>
-                  Historical Validation
-                </h2>
-                <button
-                  className="fph-expand-btn"
-                  onClick={() => setShowValidation(false)}
-                  title="Close Validation"
-                >
-                  ✕
-                </button>
-              </div>
-              <ValidationPanel city={currentCity.name} />
-            </div>
-          )}
-        </div>
+        {/* COLUMNS 2 & 3: Content */}
+        {renderContent()}
       </main>
 
       {/* Modals & Popovers */}
@@ -204,7 +274,10 @@ export const App: React.FC = () => {
       <ScenarioSimulationModal
         isOpen={isSimModalOpen}
         city={currentCity.name}
-        onClose={() => setIsSimModalOpen(false)}
+        onClose={() => {
+          setIsSimModalOpen(false);
+          if (activeNav === 'scenarios') setActiveNav('overview');
+        }}
         onApplyScenario={handleApplyScenario}
       />
     </div>

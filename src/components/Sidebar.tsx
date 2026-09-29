@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutGrid, Wind, PieChart, Sliders, Target, FileText, Settings } from 'lucide-react';
+import { LayoutGrid, Wind, PieChart, Sliders, Target, FileText, Settings, Activity, ShieldCheck, Info } from 'lucide-react';
 
 interface SidebarProps {
   activeView: string;
@@ -9,12 +9,13 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ activeView, onSelectView }) => {
   const navItems = [
     { id: 'overview', label: 'Overview', icon: LayoutGrid },
-    { id: 'live-air', label: 'Live Air Quality', icon: Wind },
-    { id: 'source-analysis', label: 'Source Analysis', icon: PieChart },
-    { id: 'simulator', label: 'Scenario Simulator', icon: Sliders },
+    { id: 'digital-twin', label: 'Digital Twin', icon: Wind },
     { id: 'hotspots', label: 'Hotspots', icon: Target },
-    { id: 'reports', label: 'Reports', icon: FileText },
-    { id: 'settings', label: 'Settings', icon: Settings },
+    { id: 'sources', label: 'Sources', icon: PieChart },
+    { id: 'forecast', label: 'Forecast', icon: Activity },
+    { id: 'scenarios', label: 'Scenarios', icon: Sliders },
+    { id: 'validation', label: 'Validation', icon: ShieldCheck },
+    { id: 'data-trust', label: 'Data / Trust', icon: Info },
   ];
 
   return (

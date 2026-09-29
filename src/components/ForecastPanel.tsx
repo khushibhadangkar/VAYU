@@ -73,12 +73,16 @@ export const ForecastPanel: React.FC<ForecastPanelProps> = ({ city, onOpenSimula
 
   // Forecast points from API
   const forecastPts = forecastData?.forecast
-    ? forecastData.forecast.map((pt, i) => {
-        const totalFcastPoints = forecastData.forecast.length;
-        const x = CHART_X_NOW + ((CHART_X_END - CHART_X_NOW) * i) / Math.max(totalFcastPoints - 1, 1);
-        return { x, aqi: pt.value, label: pt.time };
-      })
+    ? [
+        { x: CHART_X_NOW, aqi: forecastData.current ?? 168, label: 'Now' },
+        ...forecastData.forecast.map((pt, i) => {
+          const totalFcastPoints = forecastData.forecast.length;
+          const x = CHART_X_NOW + ((CHART_X_END - CHART_X_NOW) * (i + 1)) / Math.max(totalFcastPoints, 1);
+          return { x, aqi: pt.value, label: pt.time };
+        })
+      ]
     : [
+        { x: CHART_X_NOW, aqi: forecastData?.current ?? 168, label: 'Now' },
         { x: 180, aqi: 84, label: '+6h' },
         { x: 240, aqi: 76, label: '+12h' },
         { x: 300, aqi: 71, label: '+18h' },
