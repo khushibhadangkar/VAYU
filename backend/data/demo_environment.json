@@ -1,0 +1,24 @@
+{
+  "city": "Mumbai",
+  "timestamp": "2026-09-29T19:50:00Z",
+  "status": "OBSERVED",
+  "source": "demo/public-data",
+  "location": {
+    "lat": 19.076,
+    "lon": 72.8777
+  },
+  "air_quality": {
+    "aqi": 168,
+    "pm25": 68,
+    "pm10": 112,
+    "no2": 42,
+    "so2": 8,
+    "o3": 96
+  },
+  "weather": {
+    "temperature": 28,
+    "humidity": 72,
+    "wind_speed": 12,
+    "wind_direction": "NW"
+  }
+}
