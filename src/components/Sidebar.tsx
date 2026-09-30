@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutGrid, Wind, PieChart, Sliders, Target, Activity, ShieldCheck, Info, Bot } from 'lucide-react';
+import { LayoutGrid, Wind, PieChart, Sliders, Target, Activity, ShieldCheck, Info, Bot, Cpu } from 'lucide-react';
 
 interface SidebarProps {
   activeView: string;
@@ -15,6 +15,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onSelectView }) =>
     { id: 'sources', label: 'Sources', icon: PieChart },
     { id: 'forecast', label: 'Forecast', icon: Activity },
     { id: 'scenarios', label: 'Scenarios', icon: Sliders },
+    { id: 'scalability', label: 'AI Scale & ROI', icon: Cpu, badge: 'NEW' },
     { id: 'validation', label: 'Validation', icon: ShieldCheck },
     { id: 'data-trust', label: 'Data / Trust', icon: Info },
   ];
@@ -40,7 +41,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onSelectView }) =>
                     position: 'absolute',
                     top: '6px',
                     right: '8px',
-                    background: '#0284c7',
+                    background: item.badge === 'NEW' ? '#10b981' : '#0284c7',
                     color: 'white',
                     fontSize: '0.6rem',
                     fontWeight: 800,

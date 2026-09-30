@@ -13,6 +13,7 @@ import { OverviewScreen } from './components/OverviewScreen';
 import { DataTrustPanel } from './components/DataTrustPanel';
 import { VayuCopilot } from './components/VayuCopilot';
 import { ExecutiveBriefModal } from './components/ExecutiveBriefModal';
+import { FeasibilityScalabilityPanel } from './components/FeasibilityScalabilityPanel';
 import { CityOption, DiurnalData, Hotspot } from './types';
 import { api, HotspotItem, ScenarioData } from './services/api';
 
@@ -241,6 +242,13 @@ export const App: React.FC = () => {
               <ValidationPanel city={currentCity.name} />
             </div>
           </>
+        );
+
+      case 'scalability':
+        return (
+          <div style={{ gridColumn: '2 / 4', overflowY: 'auto', height: '100%' }}>
+            <FeasibilityScalabilityPanel currentCity={currentCity} />
+          </div>
         );
 
       case 'data-trust':
