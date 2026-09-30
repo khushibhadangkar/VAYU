@@ -11,8 +11,10 @@ import { TelemetryPopover } from './components/TelemetryPopover';
 import { ValidationPanel } from './components/ValidationPanel';
 import { OverviewScreen } from './components/OverviewScreen';
 import { DataTrustPanel } from './components/DataTrustPanel';
+import { VayuCopilot } from './components/VayuCopilot';
+import { ExecutiveBriefModal } from './components/ExecutiveBriefModal';
 import { CityOption, DiurnalData, Hotspot } from './types';
-import { api, HotspotItem } from './services/api';
+import { api, HotspotItem, ScenarioData } from './services/api';
 
 const DIURNAL_CYCLE: Record<number, DiurnalData> = {
   6: { aqi: 184, pm25: 78, pm10: 128, no2: 52, so2: 9, o3: 64, desc: 'Morning Inversion Peak' },
@@ -26,7 +28,7 @@ const DIURNAL_CYCLE: Record<number, DiurnalData> = {
 export const App: React.FC = () => {
   const [currentCity, setCurrentCity] = useState<CityOption>({
     name: 'Mumbai',
-    region: 'Maharashtra',
+    region: 'Maharashtra, India',
     aqi: 168,
     temp: 28,
     condition: 'Haze',
@@ -36,29 +38,33 @@ export const App: React.FC = () => {
   const [activeNav, setActiveNav] = useState('overview');
   const [currentHour, setCurrentHour] = useState(12);
   const [connectionStatus, setConnectionStatus] = useState<'connected' | 'fallback' | 'loading'>('loading');
-  const [showValidation, setShowValidation] = useState(false);
+  const [isBriefModalOpen, setIsBriefModalOpen] = useState(false);
+  const [lastScenarioResult, setLastScenarioResult] = useState<ScenarioData | null>(null);
 
   React.useEffect(() => {
     let isMounted = true;
     setConnectionStatus('loading');
 
     api.getEnvironment(currentCity.name)
-      .then(data => {
+      .then((data) => {
         if (!isMounted) return;
-        setCurrentCity(prev => ({
+        setCurrentCity((prev) => ({
           ...prev,
+          region: data.region || prev.region,
           aqi: data.air_quality.aqi,
           temp: data.weather.temperature,
           wind: `${data.weather.wind_direction} ${data.weather.wind_speed} km/h`,
         }));
         setConnectionStatus(data.status === 'DEMO_FALLBACK' ? 'fallback' : 'connected');
       })
-      .catch(err => {
+      .catch((err) => {
         console.error('API Error:', err);
         if (isMounted) setConnectionStatus('fallback');
       });
 
-    return () => { isMounted = false; };
+    return () => {
+      isMounted = false;
+    };
   }, [currentCity.name]);
 
   // Modals & Popovers
@@ -105,12 +111,28 @@ export const App: React.FC = () => {
     }
   };
 
-  const handleApplyScenario = (projectedAqi: number) => {
+  const handleApplyScenario = (projectedAqi: number, scenarioResult?: ScenarioData) => {
     setCurrentCity((prev) => ({ ...prev, aqi: projectedAqi }));
+    if (scenarioResult) {
+      setLastScenarioResult(scenarioResult);
+    }
   };
 
   const renderContent = () => {
     switch (activeNav) {
+      case 'copilot':
+        return (
+          <div className="center-stage-column" style={{ gridColumn: '2 / 4', overflowY: 'auto' }}>
+            <VayuCopilot
+              currentCity={currentCity}
+              onApplyPlanToScenario={(fleet, dust, ind) => {
+                setActiveNav('scenarios');
+              }}
+              onSelectView={setActiveNav}
+            />
+          </div>
+        );
+
       case 'scenarios':
         return (
           <div className="center-stage-column" style={{ gridColumn: '2 / 4', overflowY: 'auto' }}>
@@ -126,7 +148,11 @@ export const App: React.FC = () => {
       case 'overview':
         return (
           <div className="center-stage-column" style={{ gridColumn: '2 / 4', overflowY: 'auto' }}>
-            <OverviewScreen currentCity={currentCity} onSelectView={setActiveNav} />
+            <OverviewScreen
+              currentCity={currentCity}
+              onSelectView={setActiveNav}
+              onOpenExecutiveBrief={() => setIsBriefModalOpen(true)}
+            />
           </div>
         );
 
@@ -205,9 +231,12 @@ export const App: React.FC = () => {
                 onHotspotClick={handleHotspotClick}
               />
             </div>
-            <div className="forecast-panel-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', overflowY: 'auto', flex: 1 }}>
+            <div
+              className="forecast-panel-card"
+              style={{ display: 'flex', flexDirection: 'column', height: '100%', overflowY: 'auto', flex: 1 }}
+            >
               <div className="forecast-panel-header" style={{ marginBottom: '8px' }}>
-                <h2 className="fph-title">Historical Validation</h2>
+                <h2 className="fph-title">Historical Validation Engine</h2>
               </div>
               <ValidationPanel city={currentCity.name} />
             </div>
@@ -227,7 +256,12 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="app-layout" onClick={() => { setSelectedHotspot(null); setShowValidation(false); }}>
+    <div
+      className="app-layout"
+      onClick={() => {
+        setSelectedHotspot(null);
+      }}
+    >
       {/* Ambient Backing Glows */}
       <div className="ambient-glow glow-top-left"></div>
       <div className="ambient-glow glow-center-right"></div>
@@ -240,6 +274,8 @@ export const App: React.FC = () => {
         onOpenCommand={() => setIsCommandOpen(true)}
         connectionStatus={connectionStatus}
         onOpenValidation={() => setActiveNav('validation')}
+        onOpenCopilot={() => setActiveNav('copilot')}
+        onOpenExecutiveBrief={() => setIsBriefModalOpen(true)}
       />
 
       {/* 3-COLUMN MAIN DASHBOARD GRID */}
@@ -264,6 +300,12 @@ export const App: React.FC = () => {
         onSelectAction={handleCommandAction}
       />
 
+      <ExecutiveBriefModal
+        isOpen={isBriefModalOpen}
+        onClose={() => setIsBriefModalOpen(false)}
+        currentCity={currentCity}
+        scenarioData={lastScenarioResult}
+      />
     </div>
   );
 };
