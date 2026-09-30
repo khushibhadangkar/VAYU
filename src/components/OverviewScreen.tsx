@@ -77,17 +77,17 @@ export const OverviewScreen: React.FC<OverviewScreenProps> = ({
             </div>
             <h1
               style={{
-                fontSize: '2.2rem',
-                fontWeight: 800,
+                fontSize: '2.4rem',
+                fontWeight: 700,
                 color: primaryText,
                 marginBottom: '12px',
-                fontFamily: 'Outfit, sans-serif',
+                fontFamily: 'var(--font-serif)',
                 letterSpacing: '-0.02em',
               }}
             >
               {currentCity.name} Environmental Intelligence
             </h1>
-            <p style={{ color: secondaryText, fontSize: '1.05rem', maxWidth: '820px', lineHeight: 1.6 }}>
+            <p style={{ color: secondaryText, fontSize: '1rem', maxWidth: '820px', lineHeight: 1.6 }}>
               VAYU synthesizes real-time satellite telemetry, receptor mass-balance source attribution, 24-hour predictive forecasts, and policy simulation into unified, proactive decision support.
             </p>
           </div>
@@ -95,25 +95,39 @@ export const OverviewScreen: React.FC<OverviewScreenProps> = ({
           {/* Quick Primary AQI Dial Card */}
           <div
             style={{
-              background: '#0f172a',
-              color: '#ffffff',
+              background: 'linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)',
+              border: '1px solid #cbd5e1',
+              color: '#0f172a',
               padding: '20px 24px',
               borderRadius: '16px',
               display: 'flex',
               flexDirection: 'column',
               minWidth: '200px',
+              boxShadow: '0 4px 16px rgba(15, 23, 42, 0.04)',
             }}
           >
-            <span style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            <span style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 700 }}>
               Observed Airshed AQI
             </span>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', margin: '6px 0' }}>
-              <span style={{ fontSize: '2.8rem', fontWeight: 800, lineHeight: 1 }}>{currentCity.aqi}</span>
-              <span style={{ fontSize: '0.9rem', color: currentCity.aqi > 200 ? '#f87171' : '#fbbf24', fontWeight: 700 }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', margin: '4px 0' }}>
+              <span style={{ fontSize: '3rem', fontWeight: 700, lineHeight: 1, fontFamily: 'var(--font-serif)', color: '#0f172a' }}>
+                {currentCity.aqi}
+              </span>
+              <span
+                style={{
+                  fontSize: '0.78rem',
+                  fontWeight: 700,
+                  padding: '2px 8px',
+                  borderRadius: '999px',
+                  background: currentCity.aqi > 200 ? 'rgba(239,68,68,0.1)' : 'rgba(245,158,11,0.1)',
+                  color: currentCity.aqi > 200 ? '#dc2626' : '#d97706',
+                  border: currentCity.aqi > 200 ? '1px solid rgba(239,68,68,0.2)' : '1px solid rgba(245,158,11,0.2)',
+                }}
+              >
                 {currentCity.aqi > 200 ? 'Severe' : currentCity.aqi > 100 ? 'Moderate' : 'Good'}
               </span>
             </div>
-            <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+            <span style={{ fontSize: '0.78rem', color: '#64748b' }}>
               Wind: {currentCity.wind} • {currentCity.temp}°C
             </span>
           </div>
@@ -123,31 +137,32 @@ export const OverviewScreen: React.FC<OverviewScreenProps> = ({
         <div
           style={{
             marginTop: '24px',
-            padding: '20px',
-            background: 'linear-gradient(135deg, rgba(2, 132, 199, 0.06) 0%, rgba(56, 189, 248, 0.04) 100%)',
+            padding: '22px',
+            background: 'linear-gradient(135deg, rgba(2, 132, 199, 0.04) 0%, rgba(248, 250, 252, 0.9) 100%)',
             borderRadius: '16px',
             borderLeft: '4px solid #0284c7',
-            border: '1px solid rgba(2, 132, 199, 0.15)',
+            border: '1px solid #e2e8f0',
           }}
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#0284c7', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Bot size={18} /> VAYU Copilot Autonomous Synthesis
+            <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: '8px', fontFamily: 'var(--font-serif)' }}>
+              <Bot size={18} color="#0284c7" /> VAYU Copilot Autonomous Synthesis
             </h3>
             <button
               onClick={() => onSelectView('copilot')}
               style={{
-                background: '#0284c7',
+                background: '#0f172a',
                 color: 'white',
                 border: 'none',
-                padding: '6px 12px',
-                borderRadius: '8px',
-                fontSize: '0.75rem',
-                fontWeight: 700,
+                padding: '6px 14px',
+                borderRadius: '999px',
+                fontSize: '0.78rem',
+                fontWeight: 600,
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '4px',
+                boxShadow: '0 2px 6px rgba(15,23,42,0.12)',
               }}
             >
               Open Full Copilot <ArrowRight size={12} />
@@ -174,7 +189,7 @@ export const OverviewScreen: React.FC<OverviewScreenProps> = ({
         </div>
 
         {/* Quick Action Navigation Grid */}
-        <div style={{ marginTop: '24px', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+        <div style={{ marginTop: '24px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
           <button
             onClick={() => onSelectView('digital-twin')}
             style={{
@@ -184,15 +199,16 @@ export const OverviewScreen: React.FC<OverviewScreenProps> = ({
               background: '#0f172a',
               color: 'white',
               border: 'none',
-              padding: '12px 18px',
-              borderRadius: '10px',
-              fontSize: '0.9rem',
-              fontWeight: 700,
+              padding: '10px 20px',
+              borderRadius: '999px',
+              fontSize: '0.85rem',
+              fontWeight: 600,
               cursor: 'pointer',
-              boxShadow: '0 4px 12px rgba(15,23,42,0.15)',
+              boxShadow: '0 2px 8px rgba(15,23,42,0.15)',
+              transition: 'all 0.2s',
             }}
           >
-            <Wind size={16} /> Explore 3D Digital Twin
+            <Wind size={15} /> Explore 3D Digital Twin
           </button>
           <button
             onClick={() => onSelectView('copilot')}
@@ -200,17 +216,19 @@ export const OverviewScreen: React.FC<OverviewScreenProps> = ({
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              background: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
-              color: 'white',
-              border: 'none',
-              padding: '12px 18px',
-              borderRadius: '10px',
-              fontSize: '0.9rem',
-              fontWeight: 700,
+              background: '#ffffff',
+              color: '#0f172a',
+              border: '1px solid #cbd5e1',
+              padding: '10px 20px',
+              borderRadius: '999px',
+              fontSize: '0.85rem',
+              fontWeight: 600,
               cursor: 'pointer',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
+              transition: 'all 0.2s',
             }}
           >
-            <Bot size={16} /> AI Policy Copilot
+            <Bot size={15} color="#0284c7" /> AI Policy Copilot
           </button>
           <button
             onClick={() => onSelectView('scenarios')}
@@ -220,15 +238,17 @@ export const OverviewScreen: React.FC<OverviewScreenProps> = ({
               gap: '8px',
               background: '#ffffff',
               border: '1px solid #cbd5e1',
-              padding: '12px 18px',
-              borderRadius: '10px',
-              fontSize: '0.9rem',
-              fontWeight: 700,
+              padding: '10px 20px',
+              borderRadius: '999px',
+              fontSize: '0.85rem',
+              fontWeight: 600,
               cursor: 'pointer',
               color: '#0f172a',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
+              transition: 'all 0.2s',
             }}
           >
-            <TrendingDown size={16} /> Run Policy Scenario
+            <TrendingDown size={15} color="#059669" /> Run Policy Scenario
           </button>
           {onOpenExecutiveBrief && (
             <button
@@ -239,15 +259,17 @@ export const OverviewScreen: React.FC<OverviewScreenProps> = ({
                 gap: '8px',
                 background: '#ffffff',
                 border: '1px solid #cbd5e1',
-                padding: '12px 18px',
-                borderRadius: '10px',
-                fontSize: '0.9rem',
-                fontWeight: 700,
+                padding: '10px 20px',
+                borderRadius: '999px',
+                fontSize: '0.85rem',
+                fontWeight: 600,
                 cursor: 'pointer',
                 color: '#0f172a',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
+                transition: 'all 0.2s',
               }}
             >
-              <FileText size={16} color="#0284c7" /> Export Executive Brief
+              <FileText size={15} color="#0284c7" /> Executive Brief (PDF)
             </button>
           )}
         </div>
@@ -257,12 +279,12 @@ export const OverviewScreen: React.FC<OverviewScreenProps> = ({
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
         <div style={cardStyle}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span style={{ fontSize: '0.8rem', color: secondaryText, fontWeight: 700, textTransform: 'uppercase' }}>
+            <span style={{ fontSize: '0.75rem', color: secondaryText, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               Potential ER Averted
             </span>
             <HeartPulse size={18} color="#059669" />
           </div>
-          <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#059669' }}>
+          <div style={{ fontSize: '2rem', fontWeight: 700, color: '#059669', fontFamily: 'var(--font-serif)', lineHeight: 1.1 }}>
             ~{healthImpact.admissionsAvertedMonthly}
           </div>
           <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '4px' }}>
@@ -272,12 +294,12 @@ export const OverviewScreen: React.FC<OverviewScreenProps> = ({
 
         <div style={cardStyle}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span style={{ fontSize: '0.8rem', color: secondaryText, fontWeight: 700, textTransform: 'uppercase' }}>
+            <span style={{ fontSize: '0.75rem', color: secondaryText, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               Healthcare Savings
             </span>
-            <span style={{ fontSize: '1.1rem', fontWeight: 800, color: '#0284c7' }}>₹</span>
+            <span style={{ fontSize: '1rem', fontWeight: 700, color: '#0284c7' }}>₹</span>
           </div>
-          <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0284c7' }}>
+          <div style={{ fontSize: '2rem', fontWeight: 700, color: '#0284c7', fontFamily: 'var(--font-serif)', lineHeight: 1.1 }}>
             ₹{healthImpact.economicSavingsRupeesCr} Cr
           </div>
           <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '4px' }}>
@@ -287,12 +309,12 @@ export const OverviewScreen: React.FC<OverviewScreenProps> = ({
 
         <div style={cardStyle}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span style={{ fontSize: '0.8rem', color: secondaryText, fontWeight: 700, textTransform: 'uppercase' }}>
+            <span style={{ fontSize: '0.75rem', color: secondaryText, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               Monitored Hotspots
             </span>
             <Target size={18} color="#dc2626" />
           </div>
-          <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#dc2626' }}>
+          <div style={{ fontSize: '2rem', fontWeight: 700, color: '#dc2626', fontFamily: 'var(--font-serif)', lineHeight: 1.1 }}>
             {hotspotsSummary?.count ?? 4} Nodes
           </div>
           <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '4px' }}>
@@ -302,12 +324,12 @@ export const OverviewScreen: React.FC<OverviewScreenProps> = ({
 
         <div style={cardStyle}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span style={{ fontSize: '0.8rem', color: secondaryText, fontWeight: 700, textTransform: 'uppercase' }}>
+            <span style={{ fontSize: '0.75rem', color: secondaryText, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               Historical Validation
             </span>
             <ShieldCheck size={18} color="#10b981" />
           </div>
-          <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#10b981' }}>
+          <div style={{ fontSize: '2rem', fontWeight: 700, color: '#10b981', fontFamily: 'var(--font-serif)', lineHeight: 1.1 }}>
             6.2 MAE
           </div>
           <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '4px' }}>

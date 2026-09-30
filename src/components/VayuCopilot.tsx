@@ -94,53 +94,72 @@ export const VayuCopilot: React.FC<VayuCopilotProps> = ({
         display: 'flex',
         flexDirection: 'column',
         gap: '20px',
-        padding: '24px',
-        background: 'linear-gradient(145deg, #0b1523 0%, #152238 100%)',
-        borderRadius: '20px',
-        color: '#f8fafc',
-        boxShadow: '0 20px 50px rgba(0,0,0,0.3)',
-        border: '1px solid rgba(255,255,255,0.1)',
+        padding: '28px',
+        background: 'rgba(255, 255, 255, 0.92)',
+        borderRadius: 'var(--radius-xl)',
+        color: '#0f172a',
+        boxShadow: 'var(--shadow-card)',
+        border: '1px solid rgba(226, 232, 240, 0.8)',
         height: '100%',
         overflowY: 'auto',
+        backdropFilter: 'blur(20px)',
       }}
     >
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          borderBottom: '1px solid #f1f5f9',
+          paddingBottom: '20px',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
           <div
             style={{
-              width: '42px',
-              height: '42px',
+              width: '44px',
+              height: '44px',
               borderRadius: '12px',
-              background: 'linear-gradient(135deg, #0284c7 0%, #38bdf8 100%)',
+              background: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 0 20px rgba(56,189,248,0.4)',
+              boxShadow: '0 4px 12px rgba(2, 132, 199, 0.25)',
             }}
           >
             <Bot size={22} color="#ffffff" />
           </div>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <h2 style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0, letterSpacing: '-0.02em', color: '#ffffff' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <h2
+                style={{
+                  fontSize: '1.5rem',
+                  fontWeight: 700,
+                  margin: 0,
+                  color: '#0f172a',
+                  fontFamily: 'var(--font-serif)',
+                  letterSpacing: '-0.01em',
+                }}
+              >
                 VAYU Policy Copilot
               </h2>
               <span
                 style={{
-                  background: 'rgba(56,189,248,0.15)',
-                  color: '#38bdf8',
-                  fontSize: '0.7rem',
+                  background: 'rgba(2, 132, 199, 0.08)',
+                  color: '#0284c7',
+                  fontSize: '0.68rem',
                   fontWeight: 700,
-                  padding: '3px 8px',
+                  padding: '3px 9px',
                   borderRadius: '999px',
-                  border: '1px solid rgba(56,189,248,0.3)',
+                  border: '1px solid rgba(2, 132, 199, 0.2)',
+                  letterSpacing: '0.04em',
                 }}
               >
                 AI ADVISOR • v2.4
               </span>
             </div>
-            <p style={{ margin: 0, fontSize: '0.8rem', color: '#94a3b8', marginTop: '2px' }}>
+            <p style={{ margin: 0, fontSize: '0.84rem', color: '#64748b', marginTop: '3px' }}>
               Autonomous Environmental Decision Support for {currentCity.name}
             </p>
           </div>
@@ -156,17 +175,19 @@ export const VayuCopilot: React.FC<VayuCopilotProps> = ({
             setRecommendation(plan);
           }}
           style={{
-            background: 'rgba(255,255,255,0.06)',
-            border: '1px solid rgba(255,255,255,0.12)',
-            color: '#cbd5e1',
-            borderRadius: '8px',
-            padding: '6px 12px',
-            fontSize: '0.75rem',
+            background: '#ffffff',
+            border: '1px solid #e2e8f0',
+            color: '#475569',
+            borderRadius: '999px',
+            padding: '7px 14px',
+            fontSize: '0.78rem',
             fontWeight: 600,
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
             cursor: 'pointer',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+            transition: 'all 0.2s',
           }}
         >
           <RefreshCw size={13} /> Refresh Audit
@@ -177,14 +198,15 @@ export const VayuCopilot: React.FC<VayuCopilotProps> = ({
       {recommendation && (
         <div
           style={{
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(56,189,248,0.2)',
+            background: 'linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)',
+            border: '1px solid #e2e8f0',
             borderRadius: '16px',
-            padding: '20px',
+            padding: '24px',
             display: 'flex',
             flexDirection: 'column',
-            gap: '14px',
+            gap: '16px',
             position: 'relative',
+            boxShadow: '0 4px 16px rgba(15, 23, 42, 0.03)',
             overflow: 'hidden',
           }}
         >
@@ -204,50 +226,68 @@ export const VayuCopilot: React.FC<VayuCopilotProps> = ({
             }}
           />
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px' }}>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                 <span
                   style={{
                     background:
                       recommendation.threatLevel === 'CRITICAL'
-                        ? 'rgba(239,68,68,0.2)'
+                        ? 'rgba(239, 68, 68, 0.1)'
                         : recommendation.threatLevel === 'ELEVATED'
-                        ? 'rgba(245,158,11,0.2)'
-                        : 'rgba(16,185,129,0.2)',
+                        ? 'rgba(245, 158, 11, 0.1)'
+                        : 'rgba(16, 185, 129, 0.1)',
                     color:
                       recommendation.threatLevel === 'CRITICAL'
-                        ? '#f87171'
+                        ? '#dc2626'
                         : recommendation.threatLevel === 'ELEVATED'
-                        ? '#fbbf24'
-                        : '#34d399',
-                    fontSize: '0.75rem',
-                    fontWeight: 800,
-                    padding: '2px 8px',
+                        ? '#d97706'
+                        : '#059669',
+                    fontSize: '0.72rem',
+                    fontWeight: 700,
+                    padding: '3px 8px',
                     borderRadius: '6px',
-                    letterSpacing: '0.05em',
+                    letterSpacing: '0.04em',
                   }}
                 >
                   {recommendation.threatLevel} STATUS
                 </span>
-                <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                <span style={{ fontSize: '0.8rem', color: '#64748b' }}>
                   Target: {currentCity.name} Urban Airshed
                 </span>
               </div>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: 0, color: '#f8fafc' }}>
+              <h3
+                style={{
+                  fontSize: '1.25rem',
+                  fontWeight: 700,
+                  margin: 0,
+                  color: '#0f172a',
+                  fontFamily: 'var(--font-serif)',
+                }}
+              >
                 {recommendation.title}
               </h3>
             </div>
 
             <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Projected Benefit</div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#34d399' }}>
+              <div style={{ fontSize: '0.75rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Projected Benefit
+              </div>
+              <div
+                style={{
+                  fontSize: '1.6rem',
+                  fontWeight: 700,
+                  color: '#059669',
+                  fontFamily: 'var(--font-serif)',
+                  lineHeight: 1.1,
+                }}
+              >
                 -{recommendation.projectedAqiDrop} AQI
               </div>
             </div>
           </div>
 
-          <p style={{ fontSize: '0.9rem', color: '#cbd5e1', lineHeight: 1.6, margin: 0 }}>
+          <p style={{ fontSize: '0.92rem', color: '#334155', lineHeight: 1.6, margin: 0 }}>
             {recommendation.summary}
           </p>
 
@@ -255,39 +295,63 @@ export const VayuCopilot: React.FC<VayuCopilotProps> = ({
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
               gap: '12px',
               marginTop: '4px',
             }}
           >
             <div
               style={{
-                background: 'rgba(0,0,0,0.25)',
-                padding: '12px',
-                borderRadius: '10px',
-                border: '1px solid rgba(255,255,255,0.05)',
+                background: '#ffffff',
+                padding: '14px 16px',
+                borderRadius: '12px',
+                border: '1px solid #e2e8f0',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.02)',
               }}
             >
-              <div style={{ fontSize: '0.75rem', color: '#38bdf8', fontWeight: 700, marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <div
+                style={{
+                  fontSize: '0.72rem',
+                  color: '#0284c7',
+                  fontWeight: 700,
+                  marginBottom: '6px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  letterSpacing: '0.04em',
+                }}
+              >
                 <Zap size={13} /> IMMEDIATE PROTOCOL (0-4h)
               </div>
-              <div style={{ fontSize: '0.85rem', color: '#e2e8f0', lineHeight: 1.4 }}>
+              <div style={{ fontSize: '0.86rem', color: '#1e293b', lineHeight: 1.5 }}>
                 {recommendation.immediateAction}
               </div>
             </div>
 
             <div
               style={{
-                background: 'rgba(0,0,0,0.25)',
-                padding: '12px',
-                borderRadius: '10px',
-                border: '1px solid rgba(255,255,255,0.05)',
+                background: '#ffffff',
+                padding: '14px 16px',
+                borderRadius: '12px',
+                border: '1px solid #e2e8f0',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.02)',
               }}
             >
-              <div style={{ fontSize: '0.75rem', color: '#f59e0b', fontWeight: 700, marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <div
+                style={{
+                  fontSize: '0.72rem',
+                  color: '#b45309',
+                  fontWeight: 700,
+                  marginBottom: '6px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  letterSpacing: '0.04em',
+                }}
+              >
                 <AlertTriangle size={13} /> METEOROLOGICAL CONSTRAINT
               </div>
-              <div style={{ fontSize: '0.85rem', color: '#e2e8f0', lineHeight: 1.4 }}>
+              <div style={{ fontSize: '0.86rem', color: '#1e293b', lineHeight: 1.5 }}>
                 {recommendation.meteorologicalFactor}
               </div>
             </div>
@@ -296,47 +360,47 @@ export const VayuCopilot: React.FC<VayuCopilotProps> = ({
           {/* Intervention Parameters Banner */}
           <div
             style={{
-              background: 'rgba(2,132,199,0.12)',
-              border: '1px solid rgba(2,132,199,0.3)',
+              background: '#f0f9ff',
+              border: '1px solid #bae6fd',
               borderRadius: '12px',
-              padding: '12px 16px',
+              padding: '14px 18px',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
               flexWrap: 'wrap',
-              gap: '12px',
+              gap: '14px',
             }}
           >
-            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
               <div>
-                <span style={{ fontSize: '0.75rem', color: '#94a3b8', display: 'block' }}>EV Fleet</span>
-                <span style={{ fontSize: '0.95rem', fontWeight: 700, color: '#38bdf8' }}>{recommendation.recommendedFleetPct}%</span>
+                <span style={{ fontSize: '0.72rem', color: '#64748b', display: 'block', textTransform: 'uppercase', letterSpacing: '0.04em' }}>EV Fleet</span>
+                <span style={{ fontSize: '1.05rem', fontWeight: 700, color: '#0284c7', fontFamily: 'var(--font-serif)' }}>{recommendation.recommendedFleetPct}%</span>
               </div>
               <div>
-                <span style={{ fontSize: '0.75rem', color: '#94a3b8', display: 'block' }}>Dust Suppression</span>
-                <span style={{ fontSize: '0.95rem', fontWeight: 700, color: '#38bdf8' }}>{recommendation.recommendedDustPct}%</span>
+                <span style={{ fontSize: '0.72rem', color: '#64748b', display: 'block', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Dust Suppression</span>
+                <span style={{ fontSize: '1.05rem', fontWeight: 700, color: '#0284c7', fontFamily: 'var(--font-serif)' }}>{recommendation.recommendedDustPct}%</span>
               </div>
               <div>
-                <span style={{ fontSize: '0.75rem', color: '#94a3b8', display: 'block' }}>Industrial Shift</span>
-                <span style={{ fontSize: '0.95rem', fontWeight: 700, color: '#38bdf8' }}>{recommendation.recommendedIndustrialShiftPct}%</span>
+                <span style={{ fontSize: '0.72rem', color: '#64748b', display: 'block', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Industrial Shift</span>
+                <span style={{ fontSize: '1.05rem', fontWeight: 700, color: '#0284c7', fontFamily: 'var(--font-serif)' }}>{recommendation.recommendedIndustrialShiftPct}%</span>
               </div>
             </div>
 
             <button
               onClick={handleExecutePlan}
               style={{
-                background: applied ? '#10b981' : 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
+                background: applied ? '#059669' : '#0f172a',
                 color: '#ffffff',
                 border: 'none',
                 padding: '10px 18px',
-                borderRadius: '8px',
-                fontWeight: 700,
+                borderRadius: '999px',
+                fontWeight: 600,
                 fontSize: '0.85rem',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
                 cursor: 'pointer',
-                boxShadow: '0 4px 15px rgba(2,132,199,0.3)',
+                boxShadow: '0 2px 8px rgba(15,23,42,0.15)',
                 transition: 'all 0.2s',
               }}
             >
@@ -346,7 +410,7 @@ export const VayuCopilot: React.FC<VayuCopilotProps> = ({
                 </>
               ) : (
                 <>
-                  <Sparkles size={16} /> Auto-Test in Simulation <ArrowRight size={14} />
+                  <Sparkles size={15} /> Auto-Test in Simulation <ArrowRight size={14} />
                 </>
               )}
             </button>
@@ -356,8 +420,8 @@ export const VayuCopilot: React.FC<VayuCopilotProps> = ({
 
       {/* Quick Prompts */}
       <div>
-        <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 600, marginBottom: '8px' }}>
-          Ask Copilot or Select Scenario Prompt:
+        <div style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 600, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+          Suggested Inquiries:
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
           {quickPrompts.map((p, idx) => (
@@ -365,15 +429,24 @@ export const VayuCopilot: React.FC<VayuCopilotProps> = ({
               key={idx}
               onClick={() => handleSendPrompt(p)}
               style={{
-                background: 'rgba(255,255,255,0.06)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                color: '#e2e8f0',
-                padding: '8px 12px',
-                borderRadius: '8px',
-                fontSize: '0.8rem',
+                background: '#ffffff',
+                border: '1px solid #e2e8f0',
+                color: '#334155',
+                padding: '7px 12px',
+                borderRadius: '999px',
+                fontSize: '0.78rem',
                 cursor: 'pointer',
-                transition: 'background 0.2s',
+                transition: 'all 0.2s',
                 textAlign: 'left',
+                boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = '#cbd5e1';
+                e.currentTarget.style.background = '#f8fafc';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = '#e2e8f0';
+                e.currentTarget.style.background = '#ffffff';
               }}
             >
               {p}
@@ -386,20 +459,20 @@ export const VayuCopilot: React.FC<VayuCopilotProps> = ({
       <div
         style={{
           flex: 1,
-          minHeight: '140px',
-          background: 'rgba(0,0,0,0.3)',
-          borderRadius: '14px',
-          padding: '16px',
+          minHeight: '160px',
+          background: '#f8fafc',
+          borderRadius: '16px',
+          padding: '18px',
           overflowY: 'auto',
           display: 'flex',
           flexDirection: 'column',
-          gap: '12px',
-          border: '1px solid rgba(255,255,255,0.05)',
+          gap: '14px',
+          border: '1px solid #e2e8f0',
         }}
       >
         {chatLog.length === 0 ? (
-          <div style={{ textAlign: 'center', color: '#64748b', fontSize: '0.85rem', margin: 'auto' }}>
-            Type a policy question or select a prompt above to interrogate the VAYU Atmospheric Copilot.
+          <div style={{ textAlign: 'center', color: '#94a3b8', fontSize: '0.85rem', margin: 'auto', fontFamily: 'var(--font-serif)', fontStyle: 'italic' }}>
+            Pose a municipal policy inquiry or select an editorial prompt above to consult the VAYU Policy Advisory Engine.
           </div>
         ) : (
           chatLog.map((msg, i) => (
@@ -408,62 +481,82 @@ export const VayuCopilot: React.FC<VayuCopilotProps> = ({
               style={{
                 alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
                 maxWidth: '85%',
-                background: msg.sender === 'user' ? 'rgba(2,132,199,0.35)' : 'rgba(255,255,255,0.07)',
-                border: msg.sender === 'user' ? '1px solid rgba(2,132,199,0.5)' : '1px solid rgba(255,255,255,0.1)',
-                borderRadius: '12px',
-                padding: '10px 14px',
+                background: msg.sender === 'user' ? '#0f172a' : '#ffffff',
+                border: msg.sender === 'user' ? 'none' : '1px solid #e2e8f0',
+                borderRadius: '14px',
+                padding: '12px 16px',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
               }}
             >
-              <div style={{ fontSize: '0.7rem', color: msg.sender === 'user' ? '#7dd3fc' : '#94a3b8', marginBottom: '4px', fontWeight: 600 }}>
-                {msg.sender === 'user' ? 'Urban Planner / Municipal Officer' : 'VAYU AI Environmental Agent'} • {msg.timestamp}
+              <div
+                style={{
+                  fontSize: '0.7rem',
+                  color: msg.sender === 'user' ? '#94a3b8' : '#64748b',
+                  marginBottom: '4px',
+                  fontWeight: 600,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.04em',
+                }}
+              >
+                {msg.sender === 'user' ? 'Urban Planner / Municipal Officer' : 'VAYU Policy Advisory'} • {msg.timestamp}
               </div>
-              <div style={{ fontSize: '0.85rem', color: '#f1f5f9', lineHeight: 1.5 }}>
+              <div
+                style={{
+                  fontSize: '0.88rem',
+                  color: msg.sender === 'user' ? '#f8fafc' : '#1e293b',
+                  lineHeight: 1.6,
+                  fontFamily: msg.sender === 'vayu' ? 'var(--font-serif)' : 'var(--font-sans)',
+                }}
+              >
                 {msg.text}
               </div>
             </div>
           ))
         )}
         {isGenerating && (
-          <div style={{ alignSelf: 'flex-start', color: '#38bdf8', fontSize: '0.8rem', fontStyle: 'italic' }}>
+          <div style={{ alignSelf: 'flex-start', color: '#0284c7', fontSize: '0.82rem', fontStyle: 'italic', fontFamily: 'var(--font-serif)' }}>
             VAYU Copilot is synthesizing atmospheric telemetry & policy models...
           </div>
         )}
       </div>
 
       {/* Query Input Bar */}
-      <div style={{ display: 'flex', gap: '8px' }}>
+      <div style={{ display: 'flex', gap: '10px' }}>
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSendPrompt()}
-          placeholder={`Ask VAYU Copilot about ${currentCity.name}'s air quality interventions...`}
+          placeholder={`Ask VAYU Policy Copilot about ${currentCity.name}'s air quality interventions...`}
           style={{
             flex: 1,
-            background: 'rgba(255,255,255,0.08)',
-            border: '1px solid rgba(255,255,255,0.15)',
-            borderRadius: '10px',
-            padding: '12px 16px',
-            color: '#ffffff',
-            fontSize: '0.9rem',
+            background: '#ffffff',
+            border: '1px solid #cbd5e1',
+            borderRadius: '999px',
+            padding: '12px 20px',
+            color: '#0f172a',
+            fontSize: '0.88rem',
             outline: 'none',
+            boxShadow: '0 2px 6px rgba(0,0,0,0.03)',
           }}
         />
         <button
           onClick={() => handleSendPrompt()}
           style={{
-            background: '#0284c7',
+            background: '#0f172a',
             color: 'white',
             border: 'none',
-            borderRadius: '10px',
-            padding: '0 18px',
+            borderRadius: '999px',
+            padding: '0 20px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'pointer',
+            boxShadow: '0 2px 8px rgba(15,23,42,0.15)',
+            transition: 'all 0.2s',
           }}
         >
-          <Send size={16} />
+          <Send size={15} />
         </button>
       </div>
     </div>

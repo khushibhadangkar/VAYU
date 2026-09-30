@@ -375,78 +375,95 @@ export const ScenarioPanel: React.FC<ScenarioSimulationModalProps> = ({
           style={{
             width: '380px',
             flexShrink: 0,
-            background: '#0f172a',
+            background: 'linear-gradient(180deg, #f8fafc 0%, #edf2f7 100%)',
+            border: '1px solid #cbd5e1',
             borderRadius: '20px',
             padding: '32px',
-            color: 'white',
+            color: '#0f172a',
             display: 'flex',
             flexDirection: 'column',
+            boxShadow: '0 8px 24px rgba(15, 23, 42, 0.04)',
           }}
         >
-          <h4
-            style={{
-              color: '#94a3b8',
-              fontSize: '0.85rem',
-              textTransform: 'uppercase',
-              letterSpacing: '0.1em',
-              marginBottom: '24px',
-              margin: 0,
-            }}
-          >
-            Projected Atmospheric Result
-          </h4>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+            <Award size={16} color="#0284c7" />
+            <h4
+              style={{
+                color: '#64748b',
+                fontSize: '0.75rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.08em',
+                fontWeight: 700,
+                margin: 0,
+              }}
+            >
+              Projected Atmospheric Result
+            </h4>
+          </div>
 
           <div style={{ flex: 1 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '12px' }}>
-              <span style={{ color: '#cbd5e1', fontSize: '1.1rem' }}>Scenario AQI</span>
-              <span style={{ fontSize: '3.5rem', fontWeight: 800, lineHeight: 1 }}>{displayAqi}</span>
-            </div>
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '32px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '8px' }}>
+              <span style={{ color: '#475569', fontSize: '1rem', fontWeight: 600 }}>Scenario AQI</span>
               <span
                 style={{
-                  background: 'rgba(16,185,129,0.2)',
-                  color: '#10b981',
-                  padding: '6px 10px',
-                  borderRadius: '6px',
-                  fontSize: '0.85rem',
+                  fontSize: '3.6rem',
                   fontWeight: 700,
+                  lineHeight: 1,
+                  fontFamily: 'var(--font-serif)',
+                  color: '#0f172a',
+                }}
+              >
+                {displayAqi}
+              </span>
+            </div>
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '28px' }}>
+              <span
+                style={{
+                  background: 'rgba(5, 150, 105, 0.1)',
+                  color: '#059669',
+                  padding: '5px 10px',
+                  borderRadius: '999px',
+                  fontSize: '0.78rem',
+                  fontWeight: 700,
+                  border: '1px solid rgba(5, 150, 105, 0.2)',
                 }}
               >
                 -{displayPct}% reduction
               </span>
               <span
                 style={{
-                  background: 'rgba(255,255,255,0.1)',
-                  color: '#e2e8f0',
-                  padding: '6px 10px',
-                  borderRadius: '6px',
-                  fontSize: '0.85rem',
+                  background: '#ffffff',
+                  color: '#475569',
+                  padding: '5px 10px',
+                  borderRadius: '999px',
+                  fontSize: '0.78rem',
                   fontWeight: 600,
+                  border: '1px solid #e2e8f0',
                 }}
               >
                 {displayCategory}
               </span>
             </div>
 
-            <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '20px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px', fontSize: '0.95rem' }}>
-                <span style={{ color: '#94a3b8' }}>Baseline AQI ({city})</span>
-                <span style={{ color: '#e2e8f0', fontWeight: 600 }}>{displayBaseline}</span>
+            <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '20px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', fontSize: '0.9rem' }}>
+                <span style={{ color: '#64748b' }}>Baseline AQI ({city})</span>
+                <span style={{ color: '#0f172a', fontWeight: 700, fontFamily: 'var(--font-serif)' }}>{displayBaseline}</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px', fontSize: '0.95rem' }}>
-                <span style={{ color: '#94a3b8' }}>Model Reliability</span>
-                <span style={{ color: '#10b981', fontWeight: 600 }}>High (89% Confidence)</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', fontSize: '0.9rem' }}>
+                <span style={{ color: '#64748b' }}>Model Reliability</span>
+                <span style={{ color: '#059669', fontWeight: 700 }}>High (89% Confidence)</span>
               </div>
 
               {result?.interventions && result.interventions.length > 0 && (
-                <div style={{ marginTop: '20px', background: 'rgba(255,255,255,0.05)', padding: '16px', borderRadius: '12px' }}>
+                <div style={{ marginTop: '18px', background: '#ffffff', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
                   <div
                     style={{
                       fontWeight: 700,
                       marginBottom: '10px',
-                      color: '#e2e8f0',
-                      fontSize: '0.8rem',
-                      letterSpacing: '0.05em',
+                      color: '#475569',
+                      fontSize: '0.72rem',
+                      letterSpacing: '0.06em',
                       textTransform: 'uppercase',
                     }}
                   >
@@ -460,11 +477,11 @@ export const ScenarioPanel: React.FC<ScenarioSimulationModalProps> = ({
                         justifyContent: 'space-between',
                         marginBottom: '8px',
                         fontSize: '0.85rem',
-                        color: '#cbd5e1',
+                        color: '#334155',
                       }}
                     >
                       <span>{iv.label}</span>
-                      <span style={{ color: '#10b981', fontWeight: 600 }}>-{iv.aqi_reduction} AQI</span>
+                      <span style={{ color: '#059669', fontWeight: 700, fontFamily: 'var(--font-serif)' }}>-{iv.aqi_reduction} AQI</span>
                     </div>
                   ))}
                 </div>
@@ -475,17 +492,18 @@ export const ScenarioPanel: React.FC<ScenarioSimulationModalProps> = ({
           <button
             onClick={handleApply}
             style={{
-              padding: '16px',
-              background: 'white',
-              color: '#0f172a',
-              borderRadius: '12px',
-              fontWeight: 800,
-              fontSize: '1rem',
+              padding: '14px 20px',
+              background: '#0f172a',
+              color: 'white',
+              borderRadius: '999px',
+              fontWeight: 600,
+              fontSize: '0.92rem',
               width: '100%',
               marginTop: '24px',
               cursor: 'pointer',
               border: 'none',
-              boxShadow: '0 4px 20px rgba(255,255,255,0.2)',
+              boxShadow: '0 2px 8px rgba(15,23,42,0.15)',
+              transition: 'all 0.2s',
             }}
           >
             Apply Scenario to Live Twin

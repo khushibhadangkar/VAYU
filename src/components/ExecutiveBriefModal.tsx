@@ -198,10 +198,10 @@ VERIFICATION HASH: VAYU-DEC-AUTH-${Math.random().toString(36).substring(2, 9).to
             <div>
               <div
                 style={{
-                  fontSize: '0.75rem',
+                  fontSize: '0.72rem',
                   fontWeight: 800,
                   textTransform: 'uppercase',
-                  letterSpacing: '0.12em',
+                  letterSpacing: '0.14em',
                   color: '#0284c7',
                 }}
               >
@@ -209,10 +209,11 @@ VERIFICATION HASH: VAYU-DEC-AUTH-${Math.random().toString(36).substring(2, 9).to
               </div>
               <h1
                 style={{
-                  fontSize: '1.8rem',
-                  fontWeight: 800,
+                  fontSize: '2.1rem',
+                  fontWeight: 700,
                   margin: '4px 0 6px 0',
                   color: '#0f172a',
+                  fontFamily: 'var(--font-serif)',
                   letterSpacing: '-0.02em',
                 }}
               >

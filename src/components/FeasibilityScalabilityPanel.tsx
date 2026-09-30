@@ -40,13 +40,14 @@ export const FeasibilityScalabilityPanel: React.FC<FeasibilityScalabilityProps> 
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
               <span
                 style={{
-                  background: 'linear-gradient(135deg, #0284c7 0%, #38bdf8 100%)',
-                  color: 'white',
-                  fontSize: '0.75rem',
-                  fontWeight: 800,
-                  padding: '3px 8px',
-                  borderRadius: '6px',
-                  letterSpacing: '0.05em',
+                  background: 'rgba(2, 132, 199, 0.08)',
+                  color: '#0284c7',
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  padding: '3px 9px',
+                  borderRadius: '999px',
+                  letterSpacing: '0.04em',
+                  border: '1px solid rgba(2, 132, 199, 0.2)',
                 }}
               >
                 AI FEASIBILITY & SCALABILITY BLUEPRINT
@@ -57,36 +58,37 @@ export const FeasibilityScalabilityPanel: React.FC<FeasibilityScalabilityProps> 
             </div>
             <h1
               style={{
-                fontSize: '2.2rem',
-                fontWeight: 800,
+                fontSize: '2.4rem',
+                fontWeight: 700,
                 color: '#0f172a',
                 marginBottom: '10px',
-                fontFamily: 'Outfit, sans-serif',
+                fontFamily: 'var(--font-serif)',
                 letterSpacing: '-0.02em',
               }}
             >
               Enterprise Scalability & Model Feasibility
             </h1>
-            <p style={{ color: '#475569', fontSize: '1.05rem', maxWidth: '820px', lineHeight: 1.6 }}>
+            <p style={{ color: '#475569', fontSize: '1rem', maxWidth: '820px', lineHeight: 1.6 }}>
               VAYU is engineered to scale from a single hyper-local municipal pilot to a national grid of 100+ megacities.
               By fusing <strong>Physics-Informed Neural Networks (PINNs)</strong> with lightweight edge surrogates, VAYU achieves sub-45ms spatial inference with fractional compute economics.
             </p>
           </div>
 
           {/* Navigation Tab Pills */}
-          <div style={{ display: 'flex', gap: '8px', background: '#f1f5f9', padding: '6px', borderRadius: '12px' }}>
+          <div style={{ display: 'flex', gap: '6px', background: '#f1f5f9', padding: '5px', borderRadius: '999px', border: '1px solid #e2e8f0' }}>
             <button
               onClick={() => setActiveTab('architecture')}
               style={{
-                padding: '8px 16px',
-                borderRadius: '8px',
+                padding: '8px 18px',
+                borderRadius: '999px',
                 border: 'none',
                 background: activeTab === 'architecture' ? '#0f172a' : 'transparent',
                 color: activeTab === 'architecture' ? '#ffffff' : '#64748b',
-                fontWeight: 700,
-                fontSize: '0.85rem',
+                fontWeight: 600,
+                fontSize: '0.82rem',
                 cursor: 'pointer',
                 transition: 'all 0.2s',
+                boxShadow: activeTab === 'architecture' ? '0 2px 6px rgba(15,23,42,0.15)' : 'none',
               }}
             >
               <Cpu size={14} style={{ display: 'inline', marginRight: '6px' }} />
@@ -95,15 +97,16 @@ export const FeasibilityScalabilityPanel: React.FC<FeasibilityScalabilityProps> 
             <button
               onClick={() => setActiveTab('calculator')}
               style={{
-                padding: '8px 16px',
-                borderRadius: '8px',
+                padding: '8px 18px',
+                borderRadius: '999px',
                 border: 'none',
                 background: activeTab === 'calculator' ? '#0f172a' : 'transparent',
                 color: activeTab === 'calculator' ? '#ffffff' : '#64748b',
-                fontWeight: 700,
-                fontSize: '0.85rem',
+                fontWeight: 600,
+                fontSize: '0.82rem',
                 cursor: 'pointer',
                 transition: 'all 0.2s',
+                boxShadow: activeTab === 'calculator' ? '0 2px 6px rgba(15,23,42,0.15)' : 'none',
               }}
             >
               <DollarSign size={14} style={{ display: 'inline', marginRight: '6px' }} />
@@ -112,15 +115,16 @@ export const FeasibilityScalabilityPanel: React.FC<FeasibilityScalabilityProps> 
             <button
               onClick={() => setActiveTab('roadmap')}
               style={{
-                padding: '8px 16px',
-                borderRadius: '8px',
+                padding: '8px 18px',
+                borderRadius: '999px',
                 border: 'none',
                 background: activeTab === 'roadmap' ? '#0f172a' : 'transparent',
                 color: activeTab === 'roadmap' ? '#ffffff' : '#64748b',
-                fontWeight: 700,
-                fontSize: '0.85rem',
+                fontWeight: 600,
+                fontSize: '0.82rem',
                 cursor: 'pointer',
                 transition: 'all 0.2s',
+                boxShadow: activeTab === 'roadmap' ? '0 2px 6px rgba(15,23,42,0.15)' : 'none',
               }}
             >
               <Globe size={14} style={{ display: 'inline', marginRight: '6px' }} />
@@ -321,44 +325,51 @@ export const FeasibilityScalabilityPanel: React.FC<FeasibilityScalabilityProps> 
             </div>
 
             {/* Live Economic & Resource Metrics */}
-            <div style={{ ...cardStyle, background: '#0f172a', color: '#ffffff' }}>
+            <div
+              style={{
+                ...cardStyle,
+                background: 'linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)',
+                border: '1px solid #cbd5e1',
+                color: '#0f172a',
+              }}
+            >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#ffffff', margin: 0 }}>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#0f172a', margin: 0, fontFamily: 'var(--font-serif)' }}>
                   Projected Cloud Infrastructure Cost
                 </h3>
-                <span style={{ background: 'rgba(16,185,129,0.2)', color: '#34d399', fontSize: '0.75rem', fontWeight: 800, padding: '3px 8px', borderRadius: '6px' }}>
+                <span style={{ background: 'rgba(5, 150, 105, 0.1)', color: '#059669', fontSize: '0.72rem', fontWeight: 700, padding: '4px 10px', borderRadius: '999px', border: '1px solid rgba(5, 150, 105, 0.2)' }}>
                   HIGHLY COST-EFFICIENT
                 </span>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
-                <div style={{ background: 'rgba(255,255,255,0.06)', padding: '16px', borderRadius: '12px' }}>
-                  <span style={{ fontSize: '0.75rem', color: '#94a3b8', display: 'block' }}>Monthly Cloud Infra</span>
-                  <span style={{ fontSize: '1.8rem', fontWeight: 800, color: '#38bdf8' }}>${monthlyCloudCostUsd.toLocaleString()}</span>
-                  <span style={{ fontSize: '0.75rem', color: '#cbd5e1', display: 'block' }}>≈ ₹{monthlyCloudCostRupees.toLocaleString()} / mo</span>
+                <div style={{ background: '#ffffff', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
+                  <span style={{ fontSize: '0.72rem', color: '#64748b', display: 'block', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Monthly Cloud Infra</span>
+                  <span style={{ fontSize: '2rem', fontWeight: 700, color: '#0284c7', fontFamily: 'var(--font-serif)', lineHeight: 1.2 }}>${monthlyCloudCostUsd.toLocaleString()}</span>
+                  <span style={{ fontSize: '0.75rem', color: '#64748b', display: 'block', marginTop: '2px' }}>≈ ₹{monthlyCloudCostRupees.toLocaleString()} / mo</span>
                 </div>
 
-                <div style={{ background: 'rgba(255,255,255,0.06)', padding: '16px', borderRadius: '12px' }}>
-                  <span style={{ fontSize: '0.75rem', color: '#94a3b8', display: 'block' }}>Cost / Citizen / Year</span>
-                  <span style={{ fontSize: '1.8rem', fontWeight: 800, color: '#34d399' }}>{costPerCitizenAnnualCents}¢</span>
-                  <span style={{ fontSize: '0.75rem', color: '#cbd5e1', display: 'block' }}>≈ ₹{(costPerCitizenAnnualCents * 0.84).toFixed(2)} / citizen</span>
+                <div style={{ background: '#ffffff', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
+                  <span style={{ fontSize: '0.72rem', color: '#64748b', display: 'block', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Cost / Citizen / Year</span>
+                  <span style={{ fontSize: '2rem', fontWeight: 700, color: '#059669', fontFamily: 'var(--font-serif)', lineHeight: 1.2 }}>{costPerCitizenAnnualCents}¢</span>
+                  <span style={{ fontSize: '0.75rem', color: '#64748b', display: 'block', marginTop: '2px' }}>≈ ₹{(costPerCitizenAnnualCents * 0.84).toFixed(2)} / citizen</span>
                 </div>
 
-                <div style={{ background: 'rgba(255,255,255,0.06)', padding: '16px', borderRadius: '12px' }}>
-                  <span style={{ fontSize: '0.75rem', color: '#94a3b8', display: 'block' }}>Total Ingested Nodes</span>
-                  <span style={{ fontSize: '1.4rem', fontWeight: 800, color: '#ffffff' }}>{totalSensors.toLocaleString()}</span>
-                  <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>~{messagesPerSec} msg/sec</span>
+                <div style={{ background: '#ffffff', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
+                  <span style={{ fontSize: '0.72rem', color: '#64748b', display: 'block', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Total Ingested Nodes</span>
+                  <span style={{ fontSize: '1.5rem', fontWeight: 700, color: '#0f172a', fontFamily: 'var(--font-serif)' }}>{totalSensors.toLocaleString()}</span>
+                  <span style={{ fontSize: '0.75rem', color: '#64748b' }}>~{messagesPerSec} msg/sec</span>
                 </div>
 
-                <div style={{ background: 'rgba(255,255,255,0.06)', padding: '16px', borderRadius: '12px' }}>
-                  <span style={{ fontSize: '0.75rem', color: '#94a3b8', display: 'block' }}>Annual Storage Footprint</span>
-                  <span style={{ fontSize: '1.4rem', fontWeight: 800, color: '#ffffff' }}>{annualStorageTb} TB</span>
-                  <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Parquet / Time-Series DB</span>
+                <div style={{ background: '#ffffff', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
+                  <span style={{ fontSize: '0.72rem', color: '#64748b', display: 'block', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Annual Storage Footprint</span>
+                  <span style={{ fontSize: '1.5rem', fontWeight: 700, color: '#0f172a', fontFamily: 'var(--font-serif)' }}>{annualStorageTb} TB</span>
+                  <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Parquet / Time-Series DB</span>
                 </div>
               </div>
 
-              <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '16px', fontSize: '0.85rem', color: '#94a3b8', lineHeight: 1.5 }}>
-                ✨ <strong>Economic Takeaway for Judges:</strong> At less than <strong>1 Rupee per citizen per year</strong>, VAYU delivers a &gt;100x Return on Investment (ROI) by preventing millions in municipal respiratory healthcare expenses.
+              <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '16px', fontSize: '0.88rem', color: '#475569', lineHeight: 1.6 }}>
+                ✨ <strong style={{ color: '#0f172a' }}>Economic Takeaway for Judges:</strong> At less than <strong>1 Rupee per citizen per year</strong>, VAYU delivers a &gt;100x Return on Investment (ROI) by preventing millions in municipal respiratory healthcare expenses.
               </div>
             </div>
           </div>
